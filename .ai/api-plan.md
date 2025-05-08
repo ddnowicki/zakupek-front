@@ -215,26 +215,23 @@
 4. **Edit Shopping List**
    - **Method:** PUT
    - **URL:** `/api/shoppinglists/{id}`
-   - **Description:** Updates an existing shopping list details.
+   - **Description:** Updates an existing shopping list, including its title, store name, planned date, and items. Removed items are deleted when omitted from the products array.
    - **Headers:** `Authorization: Bearer {token}`
    - **Request Body Example:**
      ```json
      {
        "title": "Updated List Title",
-       "storeId": 2,
-       "plannedShoppingDate": "2025-04-25T11:00:00Z"
+       "storeName": "Auchan",
+       "plannedShoppingDate": "2025-04-25T11:00:00Z",
+       "products": [
+         { "id": 101, "name": "Milk", "quantity": 2 },
+         { "id": 103, "name": "Eggs", "quantity": 12 }
+       ]
      }
      ```
    - **Response Example:**
      ```json
-     {
-       "id": 1,
-       "title": "Updated List Title",
-       "storeId": 2,
-       "storeName": "Auchan",
-       "plannedShoppingDate": "2025-04-25T11:00:00Z",
-       "updatedAt": "2025-04-12T16:30:00Z"
-     }
+     true
      ```
    - **Success Codes:** 200 OK
    - **Error Codes:** 400 Bad Request, 401 Unauthorized, 404 Not Found

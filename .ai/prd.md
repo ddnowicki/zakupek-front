@@ -49,111 +49,53 @@ Użytkownicy często tracą czas na ręczne tworzenie list zakupów, a dodatkowo
 
 ## 5. Historyjki użytkowników
 
-### US-001
-
-Tytuł: Rejestracja użytkownika z danymi o domownikach i preferencjach
-Opis: Jako nowy użytkownik chcę zarejestrować konto, podając liczbę i wiek domowników oraz preferencje żywieniowe, aby aplikacja mogła trafniej generować listy zakupów.
+### US-001 Rejestracja użytkownika
+Opis: Jako nowy użytkownik chcę zarejestrować konto podając e-mail, hasło, nazwę użytkownika, liczbę i wiek domowników oraz preferencje żywieniowe, aby otrzymać token JWT i umożliwić korzystanie z API.
 Kryteria akceptacji:
+- POST /api/auth/register zwraca AuthResponse z tokenem JWT
+- Walidacja e-maila i hasła
 
-- Możliwość utworzenia konta z adresem e-mail, hasłem i nazwą użytkownika
-- Formularz do wypełnienia liczby i wieku domowników
-- Sekcja wyboru preferencji żywieniowych (np. wegetariańskie, bez laktozy)
-- Uwierzytelnione konto jest aktywne w systemie
-- Po rejestracji użytkownik otrzymuje token dostępowy do API
-
-### US-002
-
-Tytuł: Logowanie i bezpieczny dostęp
-Opis: Jako zarejestrowany użytkownik chcę móc zalogować się do aplikacji w bezpieczny sposób, aby uzyskać dostęp do moich zapisanych list zakupów.
+### US-002 Logowanie użytkownika
+Opis: Jako zarejestrowany użytkownik chcę zalogować się przy użyciu e-maila i hasła, aby otrzymać token JWT do kolejnych żądań.
 Kryteria akceptacji:
+- POST /api/auth/login zwraca AuthResponse z tokenem JWT przy poprawnych danych
+- Przy błędnych danych zwraca odpowiedni błąd
 
-- Wprowadzenie poprawnych danych logowania (e-mail oraz hasło) skutkuje dostępem do aplikacji
-- Gdy dane logowania są nieprawidłowe, wyświetlany jest komunikat o błędzie
-- Sesja uwierzytelniająca musi być zabezpieczona (np. szyfrowanym połączeniem)
-- Użytkownik otrzymuje token JWT po zalogowaniu
-
-### US-003
-
-Tytuł: Generowanie listy zakupów z wykorzystaniem AI
-Opis: Jako zalogowany użytkownik chcę otrzymać propozycję listy zakupów na podstawie historii oraz danych o domownikach i preferencjach, aby zaoszczędzić czas na planowaniu zakupów.
+### US-003 Pobranie profilu użytkownika
+Opis: Jako zalogowany użytkownik chcę pobrać moje dane profilowe, aby wyświetlić informacje o moim koncie.
 Kryteria akceptacji:
+- GET /api/users/profile zwraca UserProfileResponse z danymi użytkownika
 
-- System AI przedstawia listę produktów z uwzględnieniem sezonowości
-- Lista zawiera sugerowane ilości produktów na podstawie liczby domowników
-- Użytkownik może przejrzeć propozycje i zaakceptować je lub odrzucić
-- Możliwość określenia planowanej daty zakupów i przypisania listy do konkretnego sklepu
-
-### US-004
-
-Tytuł: Ręczne tworzenie i edycja listy zakupów
-Opis: Jako zalogowany użytkownik chcę móc samodzielnie tworzyć listę zakupów oraz dodawać, edytować i usuwać pozycje, aby modyfikować listę zgodnie z własnymi potrzebami.
+### US-004 Tworzenie listy zakupów
+Opis: Jako zalogowany użytkownik chcę utworzyć nową listę zakupów, podając tytuł, datę zakupów, sklep oraz pozycje.
 Kryteria akceptacji:
+- POST /api/shoppinglists zwraca ShoppingListDetailResponse ze szczegółami utworzonej listy
 
-- Możliwość rozpoczęcia nowej listy i dodawania produktów z określoną ilością
-- Edycja nazwy, ilości i statusu produktu
-- Usuwanie wybranych pozycji z listy
-- Możliwość zmiany tytułu listy, przypisanego sklepu i planowanej daty zakupów
-
-### US-005
-
-Tytuł: Sortowanie listy zakupów według kategorii
-Opis: Jako użytkownik chcę posortować wygenerowaną lub ręcznie stworzoną listę zakupów według podstawowych kategorii (np. napoje, pieczywo, nabiał), aby ułatwić robienie zakupów w sklepie.
+### US-005 Pobranie listy list zakupów
+Opis: Jako zalogowany użytkownik chcę przeglądać moje listy zakupów z paginacją i sortowaniem.
 Kryteria akceptacji:
+- GET /api/shoppinglists?Page=&PageSize=&Sort= zwraca ShoppingListsResponse z listą wyników i metadanymi
 
-- Aplikacja automatycznie przypisuje produkty do kategorii
-- Użytkownik może wyświetlić listę w układzie kategoria-po-kategorii
-- Kiedy brak określonej kategorii, produkt zostaje oznaczony jako "inne"
-
-### US-006
-
-Tytuł: Przeglądanie poprzednich list
-Opis: Jako zalogowany użytkownik chcę mieć dostęp do historii stworzonych lub wygenerowanych wcześniej list, aby móc przejrzeć starsze listy zakupów.
+### US-006 Pobranie szczegółów listy zakupów
+Opis: Jako zalogowany użytkownik chcę pobrać szczegóły konkretnej listy zakupów.
 Kryteria akceptacji:
+- GET /api/shoppinglists/{id} zwraca ShoppingListDetailResponse dla podanego identyfikatora
 
-- Wyświetlenie listy poprzednich zakupów z możliwością sortowania (od najnowszych do najstarszych, alfabetycznie)
-- Możliwość wglądu w szczegóły każdej zapisanej listy
-- Użytkownik może skopiować wybraną listę i ponownie ją użyć lub modyfikować
-- Paginacja wyników dla łatwiejszej nawigacji
-
-### US-007
-
-Tytuł: Wyszukiwarka produktów
-Opis: Jako zalogowany użytkownik chcę móc wyszukiwać konkretne produkty w trakcie dodawania lub edycji list, aby szybciej i łatwiej tworzyć listę zakupów.
+### US-007 Edycja listy zakupów
+Opis: Jako zalogowany użytkownik chcę zaktualizować istniejącą listę zakupów, edytując tytuł, datę, nazwę sklepu oraz pozycje. Wszystkie pozycje przesyłane w polu `products` stanowią pełny zestaw — pominięcie istniejącej pozycji oznacza jej usunięcie.
 Kryteria akceptacji:
+- PUT /api/shoppinglists/{id} zwraca wartość boolean `true` przy pomyślnej aktualizacji
+- Request Body zawiera `storeName` zamiast `storeId` oraz pełną listę `products`
 
-- Pole tekstowe do wpisania nazwy produktu
-- Filtrowanie po wpisanych znakach
-- Brak zaawansowanych filtrów w MVP (np. po marce)
-
-### US-008
-
-Tytuł: Powiadomienie o sezonowości produktów
-Opis: Jako zalogowany użytkownik chcę otrzymywać proste informacje o sezonowości wybranych produktów, aby nie otrzymywać propozycji nieodpowiednich w danym okresie.
+### US-008 Usuwanie listy zakupów
+Opis: Jako zalogowany użytkownik chcę usunąć istniejącą listę zakupów.
 Kryteria akceptacji:
+- DELETE /api/shoppinglists/{id} zwraca wartość true przy udanym usunięciu
 
-- System informuje, kiedy dany produkt jest poza sezonem
-- Ograniczona lista sezonowych produktów bazująca na uproszczonej bazie lub statycznych danych
-- Możliwość zignorowania ostrzeżenia i dodania produktu poza sezonem
-
-### US-009
-
-Tytuł: Zarządzanie statusem produktów
-Opis: Jako zalogowany użytkownik chcę móc oznaczać produkty jako kupione lub do kupienia podczas realizacji zakupów.
+### US-009 Generowanie listy zakupów
+Opis: Jako zalogowany użytkownik chcę wygenerować listę zakupów z wykorzystaniem AI na podstawie historii i preferencji.
 Kryteria akceptacji:
-
-- Możliwość zmiany statusu produktu z "do kupienia" na "kupiony" i odwrotnie
-- Wizualne rozróżnienie produktów o różnym statusie na liście
-- Automatyczne aktualizowanie statusu na serwerze po zmianie
-
-### US-010
-
-Tytuł: Przypisanie listy do konkretnego sklepu
-Opis: Jako zalogowany użytkownik chcę móc oznaczyć, w którym sklepie planuję zrealizować zakupy z danej listy.
-Kryteria akceptacji:
-
-- Możliwość wyboru sklepu podczas tworzenia lub edycji listy
-- Wyświetlanie nazwy przypisanego sklepu w podglądzie listy zakupów
-- Możliwość pozostawienia pola sklepu jako nieprzypianego (null)
+- POST /api/shoppinglists/generate zwraca ShoppingListDetailResponse z wygenerowaną listą
 
 ## 6. Metryki sukcesu
 
