@@ -12,6 +12,5 @@
         "parser": "astro"
       }
     }
-  ],
-  "endOfLine": "crlf"
+  ]
 }

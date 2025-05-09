@@ -70,29 +70,52 @@ export class ApiClient {
       headers,
     };
 
-    const response = await fetch(`${this.baseUrl}${endpoint}`, requestOptions);
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}${endpoint}`, requestOptions);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Network error occurred";
+      throw new HandledError(errorMessage, 0, { message: errorMessage });
+    }
 
     if (response.status === 204) {
       return {} as T;
     }
 
-    if (!response.ok) {
-      let errorPayload: ApiErrorPayload;
-      try {
-        errorPayload = await response.json();
-      } catch {
-        errorPayload = {
-          message: `Request failed with status ${response.status} and the response was not valid JSON.`,
-        };
+    let responseData: unknown;
+    const contentType = response.headers.get("content-type");
+    try {
+      if (contentType?.includes("application/json")) {
+        responseData = await response.json();
+      } else {
+        responseData = await response.text();
       }
-
-      const primaryErrorMessage =
-        errorPayload.detail || errorPayload.message || `HTTP Error: ${response.status} ${response.statusText}`;
-
-      throw new HandledError(primaryErrorMessage, response.status, errorPayload);
+    } catch {
+      throw new HandledError("Failed to parse response data", response.status, { message: "Invalid response format" });
     }
 
-    return (await response.json()) as T;
+    if (response.ok) {
+      return responseData as T;
+    }
+
+    let errorPayload: ApiErrorPayload = {
+      message: "An unknown error occurred",
+      detail: typeof responseData === "string" ? responseData : undefined,
+    };
+
+    if (typeof responseData === "object" && responseData !== null) {
+      errorPayload = {
+        ...errorPayload,
+        ...responseData,
+      };
+    }
+
+    const primaryErrorMessage =
+      errorPayload.detail ||
+      errorPayload.message ||
+      (typeof responseData === "string" ? responseData : `HTTP Error: ${response.status} ${response.statusText}`);
+
+    throw new HandledError(primaryErrorMessage, response.status, errorPayload);
   }
 
   async register(data: RegisterRequest): Promise<AuthResponse> {

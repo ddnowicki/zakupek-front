@@ -7,73 +7,54 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
-    email: z.string().email("Invalid email address").nonempty("Email is required"),
+    email: z.string().min(1, "Adres e-mail jest wymagany.").email("Nieprawidłowy format adresu e-mail."),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[0-9]/, "Password must contain at least one number")
-      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
-    userName: z.string().nonempty("Username is required"),
-    householdSize: z.number().int().min(1, "Household size must be at least 1").optional(),
-    ages: z.array(z.number().int().positive("Age must be positive")).optional(),
+      .min(1, "Hasło jest wymagane.")
+      .min(6, "Hasło musi mieć co najmniej 6 znaków.")
+      .regex(/[A-Z]/, "Hasło musi zawierać co najmniej jedną wielką literę.")
+      .regex(/[0-9]/, "Hasło musi zawierać co najmniej jedną cyfrę.")
+      .regex(/[^A-Za-z0-9]/, "Hasło musi zawierać co najmniej jeden znak specjalny."),
+    confirmPassword: z.string().min(1, "Potwierdzenie hasła jest wymagane."),
+    userName: z.string().min(1, "Nazwa użytkownika jest wymagana."),
+    householdSize: z
+      .string()
+      .transform((val) => parseInt(val, 10))
+      .refine((val) => !isNaN(val) && val >= 1, "Liczba domowników musi być większa lub równa 1."),
+    ages: z.array(z.union([z.string(), z.number()])).optional(),
     dietaryPreferences: z.array(z.string()).optional(),
   })
-  .refine(
-    (data) => {
-      if (data.householdSize && data.ages) {
-        return data.ages.length === data.householdSize;
-      }
-      return true;
-    },
-    {
-      message: "The number of ages must match the household size",
-      path: ["ages"],
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Hasła nie są zgodne.",
+        path: ["confirmPassword"],
+      });
     }
-  );
 
-export const productRequestSchema = z.object({
-  name: z.string().nonempty("Product name is required").max(100, "Product name must be 100 characters or less"),
-  quantity: z.number().int().positive("Quantity must be greater than 0"),
-});
+    if (data.ages) {
+      const householdSize = data.householdSize;
+      if (data.ages.length !== householdSize) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Liczba wprowadzonych wieku musi odpowiadać liczbie domowników.",
+          path: ["ages"],
+        });
+      }
 
-export const updateProductRequestSchema = z.object({
-  id: z.number().int().optional(),
-  name: z.string().nonempty("Product name is required").max(100, "Product name must be 100 characters or less"),
-  quantity: z.number().int().positive("Quantity must be greater than 0"),
-});
-
-export const createShoppingListSchema = z.object({
-  title: z.string().max(100, "Title must be 100 characters or less").optional().nullable(),
-  products: z.array(productRequestSchema).optional().nullable(),
-  plannedShoppingDate: z.string().optional().nullable(),
-  storeName: z.string().optional().nullable(),
-});
-
-export const updateShoppingListSchema = z.object({
-  title: z.string().max(100, "Title must be 100 characters or less").optional().nullable(),
-  products: z.array(updateProductRequestSchema).optional().nullable(),
-  plannedShoppingDate: z.string().optional().nullable(),
-  storeName: z.string().optional().nullable(),
-});
-
-export const generateShoppingListSchema = z.object({
-  title: z.string().max(100, "Title must be 100 characters or less").optional().nullable(),
-  plannedShoppingDate: z.string().optional().nullable(),
-  storeName: z.string().optional().nullable(),
-});
-
-export const getShoppingListsSchema = z.object({
-  page: z.number().int().min(1).default(1),
-  pageSize: z.number().int().min(1).default(10),
-  sort: z.string().default("newest"),
-});
+      data.ages.forEach((age, idx) => {
+        const parsedAge = typeof age === "string" ? parseInt(age, 10) : age;
+        if (isNaN(parsedAge) || parsedAge <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Wiek musi być liczbą większą od 0.",
+            path: ["ages", idx],
+          });
+        }
+      });
+    }
+  });
 
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
-export type ProductRequestSchemaType = z.infer<typeof productRequestSchema>;
-export type UpdateProductRequestSchemaType = z.infer<typeof updateProductRequestSchema>;
-export type CreateShoppingListSchemaType = z.infer<typeof createShoppingListSchema>;
-export type UpdateShoppingListSchemaType = z.infer<typeof updateShoppingListSchema>;
-export type GenerateShoppingListSchemaType = z.infer<typeof generateShoppingListSchema>;
-export type GetShoppingListsSchemaType = z.infer<typeof getShoppingListsSchema>;
