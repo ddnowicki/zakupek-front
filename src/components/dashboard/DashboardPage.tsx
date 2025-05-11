@@ -11,7 +11,7 @@ import { AuthService } from "../../lib/services/auth";
 import { useNavigate } from "../../lib/hooks/useNavigate";
 import { ITEMS_PER_PAGE_DESKTOP, ITEMS_PER_PAGE_MOBILE } from "../../lib/constants";
 
-const DESKTOP_BREAKPOINT = 768; // Tailwind's md breakpoint
+const DESKTOP_BREAKPOINT = 768;
 
 export const DashboardPage = () => {
   const [lists, setLists] = useState<ShoppingListResponse[]>([]);
@@ -36,7 +36,7 @@ export const DashboardPage = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
+    handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -51,7 +51,6 @@ export const DashboardPage = () => {
   useEffect(() => {
     const fetchLists = async () => {
       if (!authService.isAuthenticated()) {
-        console.log("No valid token found in DashboardPage");
         navigate(`/login?redirectUrl=${window.location.pathname}`);
         return;
       }
