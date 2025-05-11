@@ -9,6 +9,7 @@ import { ApiClient } from "../../lib/api";
 import { ShoppingListService } from "../../lib/services/shopping-list";
 import { AuthService } from "../../lib/services/auth";
 import type { CreateShoppingListRequest } from "../../types";
+import { useNavigate } from "../../lib/hooks/useNavigate";
 
 interface CreateListButtonProps {
   onListCreated: () => void;
@@ -26,6 +27,7 @@ export const CreateListButton = ({ onListCreated }: CreateListButtonProps) => {
   const apiClient = useMemo(() => new ApiClient(), []);
   const authService = useMemo(() => new AuthService(apiClient), [apiClient]);
   const shoppingListService = useMemo(() => new ShoppingListService(apiClient), [apiClient]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export const CreateListButton = ({ onListCreated }: CreateListButtonProps) => {
     try {
       if (!authService.isAuthenticated()) {
         console.log("No valid token found in CreateListButton");
-        toast.error("Brak autoryzacji");
+        navigate(`/login?redirectUrl=${window.location.pathname}`);
         return;
       }
 

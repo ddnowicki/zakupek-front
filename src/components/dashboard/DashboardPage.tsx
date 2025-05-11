@@ -7,6 +7,7 @@ import { CreateListButton } from "./CreateListButton";
 import { ApiClient } from "../../lib/api";
 import { ShoppingListService } from "../../lib/services/shopping-list";
 import { AuthService } from "../../lib/services/auth";
+import { useNavigate } from "../../lib/hooks/useNavigate";
 
 export const DashboardPage = () => {
   const [lists, setLists] = useState<ShoppingListResponse[]>([]);
@@ -19,6 +20,7 @@ export const DashboardPage = () => {
   const apiClient = useMemo(() => new ApiClient(), []);
   const authService = useMemo(() => new AuthService(apiClient), [apiClient]);
   const shoppingListService = useMemo(() => new ShoppingListService(apiClient), [apiClient]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Load token on mount
@@ -36,7 +38,7 @@ export const DashboardPage = () => {
 
         if (!authService.isAuthenticated()) {
           console.log("No valid token found in DashboardPage");
-          setError("Brak autoryzacji");
+          navigate(`/login?redirectUrl=${window.location.pathname}`);
           return;
         }
 
@@ -52,7 +54,7 @@ export const DashboardPage = () => {
     };
 
     fetchLists();
-  }, [currentPage, sort, shoppingListService, authService]);
+  }, [currentPage, sort, shoppingListService, authService, navigate]);
 
   const handleSortChange = (newSort: string) => {
     setSort(newSort);
