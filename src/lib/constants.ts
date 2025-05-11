@@ -36,3 +36,6 @@ export const HOUSEHOLD_SIZE_OPTIONS: HouseholdSizeOption[] = Array.from({ length
   value: i.toString(),
   label: i.toString(),
 }));
+
+export const ITEMS_PER_PAGE_DESKTOP = 9;
+export const ITEMS_PER_PAGE_MOBILE = 3;
