@@ -79,14 +79,40 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
 
     try {
       const response = await authService.login(state.data);
+
+      // Debug - log response
+      console.log('Login response:', {
+        userId: response.userId,
+        userName: response.userName,
+        token: response.accessToken,
+        expiresAt: response.expiresAt
+      });
+
+      // Save auth data
+      localStorage.setItem("token", response.accessToken);
+      localStorage.setItem("token_expires", response.expiresAt);
+      localStorage.setItem("user_id", response.userId.toString());
+
+      // Debug - verify saved data
+      console.log('Saved in localStorage:', {
+        token: localStorage.getItem("token"),
+        expires: localStorage.getItem("token_expires"),
+        userId: localStorage.getItem("user_id")
+      });
+
       if (onSuccess) {
         onSuccess(response);
       }
+
       setState((prev) => ({
         ...prev,
         isLoading: false,
         redirectTo: "/lists",
       }));
+
+      // Debug - log before navigation
+      console.log('Redirecting to /lists with token:', localStorage.getItem("token"));
+
     } catch (error: unknown) {
       let formErrorMessage = "Wystąpił nieznany błąd podczas logowania.";
 
@@ -99,6 +125,8 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
       } else if (error instanceof Error) {
         formErrorMessage = error.message;
       }
+
+      console.error('Login error:', error);
 
       setState((prev) => ({
         ...prev,

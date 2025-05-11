@@ -3,8 +3,8 @@ import type { AuthResponse, LoginRequest, RegisterRequest, UserProfileResponse }
 
 export class AuthService {
   private apiClient: ApiClient;
-  private tokenKey = "auth_token";
-  private userKey = "user_data";
+  private tokenKey = "token";
+  private userKey = "user_id";
   private expiresKey = "token_expires";
 
   constructor(apiClient: ApiClient) {
