@@ -104,14 +104,17 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
         onSuccess(response);
       }
 
+      const params = new URLSearchParams(window.location.search);
+      const redirectUrl = params.get('redirectUrl');
+
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        redirectTo: "/lists",
+        redirectTo: redirectUrl || "/lists",
       }));
 
       // Debug - log before navigation
-      console.log('Redirecting to /lists with token:', localStorage.getItem("token"));
+      console.log('Redirecting to', redirectUrl || "/lists", 'with token:', localStorage.getItem("token"));
 
     } catch (error: unknown) {
       let formErrorMessage = "Wystąpił nieznany błąd podczas logowania.";

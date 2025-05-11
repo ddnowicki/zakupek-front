@@ -146,7 +146,9 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
         onSuccess(response);
       }
 
-      navigate("/lists");
+      const params = new URLSearchParams(window.location.search);
+      const redirectUrl = params.get('redirectUrl');
+      navigate(redirectUrl || "/lists");
     } catch (error: unknown) {
       let formErrorMessage = "Wystąpił nieznany błąd podczas rejestracji.";
 
