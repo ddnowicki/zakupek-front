@@ -15,26 +15,15 @@ const API_BASE_URL = import.meta.env.PUBLIC_API_BASE_URL || "https://localhost:5
 export interface ApiErrorPayload {
   message?: string;
   detail?: string;
-  errors?: Record<string, string[]>;
-  [key: string]: unknown;
 }
 
 export class HandledError extends Error {
-  status: number;
-  response: {
-    status: number;
-    data: ApiErrorPayload;
-  };
-
-  constructor(message: string, status: number, responseData: ApiErrorPayload) {
+  constructor(
+    message: string,
+    public status: number,
+    public payload: ApiErrorPayload
+  ) {
     super(message);
-    this.name = "HandledError";
-    this.status = status;
-    this.response = {
-      status: status,
-      data: responseData,
-    };
-    Object.setPrototypeOf(this, HandledError.prototype);
   }
 }
 
@@ -55,19 +44,18 @@ export class ApiClient {
   }
 
   private async fetchWithAuth<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const headers = new Headers(options.headers);
+    const currentMethod = options.method ? options.method.toUpperCase() : 'GET';
 
-    if (!headers.has("Content-Type") && options.method !== "GET") {
-      headers.append("Content-Type", "application/json");
-    }
-
-    if (this.token) {
-      headers.append("Authorization", `Bearer ${this.token}`);
-    }
+    const headers = new Headers({
+      'Accept': 'application/json',
+      ...(currentMethod !== 'GET' ? { 'Content-Type': 'application/json' } : {}),
+      ...(this.token ? { 'Authorization': `Bearer ${this.token}` } : {}),
+      ...(options.headers || {})
+    });
 
     const requestOptions: RequestInit = {
       ...options,
-      headers,
+      headers
     };
 
     let response: Response;

@@ -1,10 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RegisterForm from "../components/auth/RegisterForm.tsx";
+
+const redirectUrl = Astro.url.searchParams.get("redirectUrl");
 ---
 
 <Layout title="Rejestracja | Zakupek">
-  <main class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-purple-50">
+  <main class="flex-1 w-full flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-purple-50">
     <div class="max-w-2xl w-full bg-white rounded-xl shadow-lg p-6 sm:p-8">
       <div class="text-center mb-6">
         <h1 class="text-3xl font-bold mb-2 text-gray-900">Rejestracja</h1>
@@ -16,7 +18,7 @@ import RegisterForm from "../components/auth/RegisterForm.tsx";
       <div class="mt-6 pt-4 border-t border-gray-200 text-center">
         <p class="text-sm text-gray-600">
           Masz już konto?
-          <a href="/login" class="text-blue-600 hover:text-blue-800 font-medium">Zaloguj się</a>
+          <a href={`/login${redirectUrl ? `?redirectUrl=${encodeURIComponent(redirectUrl)}` : ''}`} class="text-blue-600 hover:text-blue-800 font-medium">Zaloguj się</a>
         </p>
       </div>
     </div>
