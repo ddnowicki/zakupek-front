@@ -40,7 +40,7 @@ export const CreateListButton = ({ onListCreated }: CreateListButtonProps) => {
         return;
       }
 
-      await shoppingListService.createShoppingList(formData);
+      const newList = await shoppingListService.createShoppingList(formData);
 
       setIsOpen(false);
       onListCreated();
@@ -50,6 +50,8 @@ export const CreateListButton = ({ onListCreated }: CreateListButtonProps) => {
         storeName: "",
       });
       toast.success("Lista została utworzona");
+      // Przekieruj do strony edycji nowej listy
+      navigate(`/lists/${newList.id}`);
     } catch (error) {
       console.error("Error creating list:", error);
       toast.error(error instanceof Error ? error.message : "Wystąpił błąd podczas tworzenia listy");

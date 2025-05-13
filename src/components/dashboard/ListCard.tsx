@@ -9,7 +9,7 @@ interface ListCardProps {
 
 export const ListCard = ({ list }: ListCardProps) => {
     return (
-        <Card className="hover:bg-accent cursor-pointer transition-colors" onClick={() => window.location.href = `/list/${list.id}`}>
+        <Card className="hover:bg-accent cursor-pointer transition-colors" onClick={() => window.location.href = `/lists/${list.id}`}>
             <CardHeader>
                 <CardTitle>{list.title || 'Lista bez nazwy'}</CardTitle>
             </CardHeader>

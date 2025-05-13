@@ -21,7 +21,7 @@ export class HandledError extends Error {
   constructor(
     message: string,
     public status: number,
-    public payload: ApiErrorPayload
+    public payload: ApiErrorPayload,
   ) {
     super(message);
   }
@@ -44,18 +44,18 @@ export class ApiClient {
   }
 
   private async fetchWithAuth<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const currentMethod = options.method ? options.method.toUpperCase() : 'GET';
+    const currentMethod = options.method ? options.method.toUpperCase() : "GET";
 
     const headers = new Headers({
-      'Accept': 'application/json',
-      ...(currentMethod !== 'GET' ? { 'Content-Type': 'application/json' } : {}),
-      ...(this.token ? { 'Authorization': `Bearer ${this.token}` } : {}),
-      ...(options.headers || {})
+      "Accept": "application/json",
+      ...(!["GET", "DELETE"].includes(currentMethod) ? { "Content-Type": "application/json" } : {}),
+      ...(this.token ? { "Authorization": `Bearer ${this.token}` } : {}),
+      ...(options.headers || {}),
     });
 
     const requestOptions: RequestInit = {
       ...options,
-      headers
+      headers,
     };
 
     let response: Response;
@@ -126,7 +126,7 @@ export class ApiClient {
 
   async getShoppingLists(page = 1, pageSize = 10, sort = "newest"): Promise<ShoppingListsResponse> {
     return this.fetchWithAuth<ShoppingListsResponse>(
-      `/api/shoppinglists?page=${page}&pageSize=${pageSize}&sort=${sort}`
+      `/api/shoppinglists?page=${page}&pageSize=${pageSize}&sort=${sort}`,
     );
   }
 
