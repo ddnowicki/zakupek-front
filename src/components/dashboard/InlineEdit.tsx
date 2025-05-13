@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input"; // Assuming shadcn/ui input
-import { Button } from "@/components/ui/button"; // Assuming shadcn/ui button
 import { toast } from "sonner"; // Ensure toast is imported
 
 interface InlineEditProps {

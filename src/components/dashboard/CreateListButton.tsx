@@ -5,11 +5,11 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { ApiClient } from "../../lib/api";
-import { ShoppingListService } from "../../lib/services/shopping-list";
-import { AuthService } from "../../lib/services/auth";
-import type { CreateShoppingListRequest } from "../../types";
-import { useNavigate } from "../../lib/hooks/useNavigate";
+import { ApiClient } from "@/lib/api.ts";
+import { ShoppingListService } from "@/lib/services/shopping-list.ts";
+import { AuthService } from "@/lib/services/auth.ts";
+import type { CreateShoppingListRequest } from "@/types.ts";
+import { useNavigate } from "@/lib/hooks/useNavigate.ts";
 
 interface CreateListButtonProps {
   onListCreated: () => void;

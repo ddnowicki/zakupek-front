@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import type { ShoppingListResponse } from '../../types';
+import type { ShoppingListResponse } from "@/types.ts";
 
 interface ListCardProps {
     list: ShoppingListResponse;

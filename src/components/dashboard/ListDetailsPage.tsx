@@ -10,7 +10,6 @@ import { ApiClient, HandledError } from "@/lib/api";
 import { ShoppingListService } from "@/lib/services/shopping-list";
 import { useNavigate } from "@/lib/hooks/useNavigate";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface ListDetailsPageProps {
