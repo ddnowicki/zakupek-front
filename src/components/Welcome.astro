@@ -1,91 +1,134 @@
-<div
-  class="relative w-full mx-auto min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 p-4 sm:p-8"
->
-  <div
-    class="relative max-w-4xl mx-auto backdrop-blur-xl bg-gradient-to-b from-white/10 to-white/5 rounded-2xl shadow-2xl p-8 text-white border border-white/10"
-  >
-    <div class="space-y-8">
-      <div class="text-center">
-        <h1
-          class="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-transparent bg-clip-text drop-shadow-lg"
-        >
-          Witaj w 10xDevs Astro Starter!
-        </h1>
-        <p class="text-xl text-blue-100/90 drop-shadow-md">
-          Ten projekt został zbudowany w oparciu o nowoczesny stack technologiczny:
-        </p>
-      </div>
+---
+import { Button } from "./ui/button";
+---
 
-      <div class="flex flex-col gap-6 max-w-2xl mx-auto">
-        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-          <h2
-            class="text-2xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200"
-          >
-            Core
-          </h2>
-          <ul class="space-y-3">
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm">Astro v5.5.5</span>
-              <span class="text-blue-100/90">- Metaframework do aplikacji webowych</span>
-            </li>
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm">React v19</span>
-              <span class="text-blue-100/90">- Biblioteka UI do komponentów interaktywnych</span>
-            </li>
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm">TypeScript</span>
-              <span class="text-blue-100/90">- Typowanie statyczne</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-          <h2
-            class="text-2xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200"
-          >
-            Stylowanie
-          </h2>
-          <ul class="space-y-3">
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm"
-                >Tailwind CSS v4</span
-              >
-              <span class="text-blue-100/90">- Utility-first CSS framework</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-          <h2
-            class="text-2xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200"
-          >
-            Statyczna analiza kodu
-          </h2>
-          <ul class="space-y-3">
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm">ESLint v9</span>
-              <span class="text-blue-100/90">- Lintowanie kodu</span>
-            </li>
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm">Prettier</span>
-              <span class="text-blue-100/90">- Formatowanie kodu</span>
-            </li>
-            <li class="flex items-center space-x-3">
-              <span class="font-mono bg-blue-900/50 px-3 py-1.5 rounded-lg text-blue-200 shadow-sm"
-                >Husky i Lint-staged</span
-              >
-              <span class="text-blue-100/90">- Automatyczna analiza kodu przed commitowaniem</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="text-lg text-center text-blue-100/90 mt-8 leading-relaxed">
-        Starter zawiera wszystko, czego potrzebujesz do rozpoczęcia tworzenia <br class="hidden sm:block" />
-        <span class="font-semibold bg-gradient-to-r from-blue-200 to-purple-200 text-transparent bg-clip-text"
-          >nowoczesnych aplikacji webowych!</span
-        >
+<div class="min-h-screen bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto px-4 py-16">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-[1.2] pb-1">
+        Inteligentne Listy Zakupów
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+        Oszczędzaj czas i nigdy nie zapomnij o ważnych zakupach dzięki naszemu inteligentnemu systemowi list zakupowych wspomaganemu przez AI.
       </p>
+      <div class="flex gap-4 justify-center">
+        <a href="/register">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors">
+            Rozpocznij za darmo
+          </Button>
+        </a>
+        <a href="/login">
+          <Button variant="outline" className="px-8 py-3 rounded-lg text-lg font-medium">
+            Zaloguj się
+          </Button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <!-- AI Generation -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Generowanie przez AI</h3>
+        <p class="text-gray-600">Automatycznie generuj listy zakupów dostosowane do Twoich preferencji i historii zakupów.</p>
+      </div>
+
+      <!-- Personalization -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Personalizacja</h3>
+        <p class="text-gray-600">Dostosuj listy do wielkości gospodarstwa domowego i preferencji żywieniowych.</p>
+      </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-16">
+      <h2 class="text-3xl font-bold text-center mb-8">Dlaczego warto używać naszej aplikacji?</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-blue-100 p-2 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-1">Oszczędność czasu</h3>
+            <p class="text-gray-600">Automatyczne generowanie list oszczędza Twój cenny czas.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="bg-green-100 p-2 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-1">Nie zapomnisz o niczym</h3>
+            <p class="text-gray-600">AI dba o to, by wszystkie potrzebne produkty znalazły się na liście.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History & Stats Section -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h3 class="text-2xl font-bold mb-4">Historia zakupów</h3>
+        <p class="text-gray-600 mb-4">
+          Przeglądaj swoje poprzednie listy zakupów, analizuj wzorce i korzystaj z historii, aby tworzyć lepsze listy w przyszłości.
+        </p>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Sortowanie według daty i nazwy
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Łatwe kopiowanie poprzednich list
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Analiza częstotliwości zakupów
+          </li>
+        </ul>
+      </div>
+      <div class="bg-gradient-to-br from-blue-500 to-purple-600 p-8 rounded-xl text-white">
+        <h3 class="text-2xl font-bold mb-4">Statystyki</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+            <p class="text-3xl font-bold">98%</p>
+            <p class="text-sm opacity-90">Zadowolonych użytkowników</p>
+          </div>
+          <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+            <p class="text-3xl font-bold">75%</p>
+            <p class="text-sm opacity-90">Oszczędność czasu</p>
+          </div>
+          <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+            <p class="text-3xl font-bold">10k+</p>
+            <p class="text-sm opacity-90">Aktywnych list</p>
+          </div>
+          <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+            <p class="text-3xl font-bold">24/7</p>
+            <p class="text-sm opacity-90">Dostępność</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

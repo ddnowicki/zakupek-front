@@ -2,7 +2,7 @@
 
 ## 1. Przegląd produktu
 
-Aplikacja webowa, której głównym celem jest ułatwienie tworzenia list zakupów za pomocą systemu AI oraz historii poprzednich zakupów. Pozwala ona na dostosowanie proponowanych list zgodnie z danymi demograficznymi użytkownika oraz jego preferencjami żywieniowymi. Aplikacja ma zapewnić zarówno wygodny sposób ręcznego edytowania list, jak i automatyczne sortowanie produktów w kategoriach.
+Aplikacja webowa, której głównym celem jest ułatwienie tworzenia list zakupów za pomocą systemu AI oraz historii poprzednich zakupów. Pozwala ona na dostosowanie proponowanych list zgodnie z danymi demograficznymi użytkownika oraz jego preferencjami żywieniowymi. Aplikacja ma zapewnić zarówno wygodny sposób ręcznego edytowania list.
 
 ## 2. Problem użytkownika
 
@@ -27,13 +27,12 @@ Użytkownicy często tracą czas na ręczne tworzenie list zakupów, a dodatkowo
 4. Zarządzanie statusem produktów na liście:
     - Oznaczanie produktów jako "do kupienia" lub "kupione"
     - Śledzenie zmian statusu produktów w czasie rzeczywistym
-5. Sortowanie list zakupów według podstawowych kategorii (np. napoje, pieczywo, nabiał).
-6. Przeglądanie poprzednich list zapisanych w historii konta:
+5. Przeglądanie poprzednich list zapisanych w historii konta:
     - Sortowanie list według różnych kryteriów (najnowsze, najstarsze, alfabetycznie)
     - Paginacja wyników dla lepszej nawigacji
-7. Podstawowa wyszukiwarka produktów w czasie tworzenia lub edycji listy.
-8. Brak rekomendacji związanych z konkretnymi markami w ramach MVP.
-9. Brak rozbudowanych filtrów i zaawansowanego systemu raportowania (przeznaczone na dalsze etapy).
+6. Podstawowa wyszukiwarka produktów w czasie tworzenia lub edycji listy.
+7. Brak rekomendacji związanych z konkretnymi markami w ramach MVP.
+8. Brak rozbudowanych filtrów i zaawansowanego systemu raportowania (przeznaczone na dalsze etapy).
 
 ## 4. Granice produktu
 
