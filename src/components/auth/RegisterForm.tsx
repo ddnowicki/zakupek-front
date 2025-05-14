@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import HouseholdSizeInput from "./HouseholdSizeInput";
-import FormErrors from "./FormErrors";
 import DietaryCombobox from "./DietaryCombobox";
 import { DIETARY_PREFERENCES } from "@/lib/constants";
 import type { AuthResponse } from "@/types";
@@ -26,8 +25,6 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     handleDietaryPreferenceAdd,
   } = useRegisterForm(onSuccess);
 
-  const formErrors = errors.form ? [errors.form] : [];
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -36,8 +33,6 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
-      {formErrors.length > 0 && <FormErrors errors={formErrors} />}
-
       <EmailInput
         value={data.email}
         onChange={handleInputChange}
@@ -143,53 +138,17 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       <fieldset disabled={isLoading}>
         <legend className="text-sm font-medium text-gray-700">Preferencje dietetyczne</legend>
         <div className="mt-2">
-          <DietaryCombobox onAdd={handleDietaryPreferenceAdd} disabled={isLoading} />
-          {data.dietaryPreferences.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {data.dietaryPreferences.map((dietId) => {
-                const isCustom = !DIETARY_PREFERENCES.some((d) => d.id === dietId);
-                const diet = isCustom
-                  ? {
-                      id: dietId,
-                      label: dietId
-                        .split("-")
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(" "),
-                    }
-                  : DIETARY_PREFERENCES.find((d) => d.id === dietId);
-
-                if (!diet) return null;
-
-                return (
-                  <div
-                    key={diet.id}
-                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-sm ${
-                      isCustom ? "bg-blue-50" : "bg-gray-100"
-                    }`}
-                  >
-                    <span>{diet.label}</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setState((prev) => ({
-                          ...prev,
-                          data: {
-                            ...prev.data,
-                            dietaryPreferences: prev.data.dietaryPreferences.filter((id) => id !== diet.id),
-                          },
-                        }));
-                      }}
-                      className="ml-1 text-gray-400 hover:text-gray-600"
-                      disabled={isLoading}
-                      aria-label={`Usuń ${diet.label}`}
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <DietaryCombobox 
+            value={data.dietaryPreferences}
+            onChange={(newPreferences) => setState(prev => ({
+              ...prev,
+              data: {
+                ...prev.data,
+                dietaryPreferences: newPreferences
+              }
+            }))}
+            disabled={isLoading}
+          />
         </div>
       </fieldset>
 

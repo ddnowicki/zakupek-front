@@ -25,7 +25,7 @@ const { title } = Astro.props;
 	<body class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-screen">
 		<header class="py-4 px-6 bg-white dark:bg-gray-800 shadow-md shrink-0">
 			<div class="container mx-auto flex justify-between items-center">
-				<a href="/" class="text-2xl font-bold text-gray-800 dark:text-white">Zakupek</a>
+				<a href="/" class="text-2xl font-bold text-gray-800 dark:text-white" id="homeLink">Zakupek</a>
 				<ProfileDropdown client:load />
 			</div>
 		</header>
@@ -33,6 +33,14 @@ const { title } = Astro.props;
 			<slot />
 		</main>
 		<Toaster richColors closeButton position="top-right" client:load />
+
+		<script>
+			// Update home link based on authentication status
+			const homeLink = document.getElementById('homeLink') as HTMLAnchorElement;
+			if (homeLink && localStorage.getItem('token')) {
+				homeLink.href = '/lists';
+			}
+		</script>
 	</body>
 </html>
 
