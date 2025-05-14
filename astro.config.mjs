@@ -8,7 +8,7 @@ import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
+  output: "static",
   integrations: [react(), sitemap()],
   server: { port: 3000 },
   vite: {
