@@ -1,6 +1,7 @@
 import React from "react";
 import { useUserProfile } from "../hooks/useUserProfile";
 import ProfileForm from "./ProfileForm.tsx";
+import { toast } from "sonner";
 
 const ProfileFormWrapper: React.FC = () => {
   const {
@@ -22,12 +23,20 @@ const ProfileFormWrapper: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="max-w-md mx-auto p-6 bg-red-50 rounded-lg">
-        <h2 className="text-lg font-semibold text-red-700 mb-2">Błąd ładowania profilu</h2>
-        <p className="text-red-600">{error}</p>
-      </div>
-    );
+    // Try to extract just the error reason if it's an API error response
+    let errorMessage = error;
+    try {
+      const errorResponse = JSON.parse(error);
+      if (errorResponse.errors?.[0]?.reason) {
+        errorMessage = errorResponse.errors[0].reason;
+      }
+    } catch {
+      // If parsing fails, use the original error message
+    }
+
+    toast.error("Błąd ładowania profilu", {
+      description: errorMessage
+    });
   }
 
   if (!profile) {

@@ -5,14 +5,17 @@ import { Label } from '../ui/label';
 import DietaryCombobox from './DietaryCombobox';
 import type { UpdateUserProfileRequest, UserProfileResponse } from '../../types';
 import { useId } from 'react';
+import { toast } from 'sonner';
+import { profileSchema } from '@/lib/validation';
+import type { z } from 'zod';
 
 interface ProfileFormProps {
   initialData: Omit<UserProfileResponse, 'id' | 'email' | 'createdAt' | 'listsCount'>;
   onSubmit: (data: UpdateUserProfileRequest) => Promise<boolean>;
   isLoading: boolean;
   apiError: string | null;
-  email?: string; // Dodatkowe pole tylko do wyświetlenia
-  listsCount?: number; // Dodatkowe pole tylko do wyświetlenia
+  email?: string;
+  listsCount?: number;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({
@@ -32,31 +35,45 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   });
   const [validationErrors, setValidationErrors] = React.useState<Record<string, string>>({});
 
-  const validateForm = (): boolean => {
-    const errors: Record<string, string> = {};
-    
-    if (!formData.userName.trim()) {
-      errors.userName = 'Nazwa użytkownika jest wymagana';
-    }
-    
-    if (formData.householdSize) {
-      const size = parseInt(formData.householdSize);
-      if (isNaN(size) || size < 1) {
-        errors.householdSize = 'Liczba domowników musi być dodatnia';
-      } else if (formData.ages.length !== size) {
-        errors.ages = `Proszę podać ${size} wiek${size > 1 ? 'ów' : ''}`;
+  React.useEffect(() => {
+    if (apiError) {
+      let errorMessage = apiError;
+      try {
+        const errorResponse = JSON.parse(apiError);
+        if (errorResponse.errors?.[0]?.reason) {
+          errorMessage = errorResponse.errors[0].reason;
+        }
+      } catch {
+        // If parsing fails, use the original error message
       }
+      
+      toast.error("Błąd aktualizacji profilu", {
+        description: errorMessage
+      });
+    }
+  }, [apiError]);
+
+  const validateForm = () => {
+    const result = profileSchema.safeParse(formData);
+    
+    if (result.success) {
+      setValidationErrors({});
+      return true;
     }
 
-    formData.ages.forEach((age, index) => {
-      const parsed = parseInt(age);
-      if (isNaN(parsed) || parsed < 0) {
-        errors[`age_${index}`] = 'Wiek musi być liczbą dodatnią';
+    const errors: Record<string, string> = {};
+    result.error.errors.forEach((error) => {
+      const path = error.path.join('.');
+      if (error.path[0] === 'ages' && error.path.length > 1) {
+        // Handle individual age errors
+        errors[`age_${error.path[1]}`] = error.message;
+      } else {
+        errors[path] = error.message;
       }
     });
-
+    
     setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+    return false;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,21 +90,21 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       dietaryPreferences: formData.dietaryPreferences
     };
 
-    await onSubmit(updateData);
+    const success = await onSubmit(updateData);
+    if (success) {
+      toast.success("Profil został zaktualizowany");
+    }
   };
 
   const handleHouseholdSizeChange = (value: string) => {
     const newSize = parseInt(value) || 0;
     const currentAges = [...formData.ages];
     
-    // Adjust ages array based on new household size
     if (newSize > currentAges.length) {
-      // Add empty ages for new household members
       while (currentAges.length < newSize) {
         currentAges.push('');
       }
     } else {
-      // Remove extra ages if household size decreased
       while (currentAges.length > newSize) {
         currentAges.pop();
       }
@@ -106,12 +123,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       onSubmit={handleSubmit}
       className="max-w-md mx-auto space-y-6 p-6 bg-white rounded-lg shadow"
     >
-      {apiError && (
-        <div className="p-3 mb-4 text-sm text-red-500 bg-red-100 rounded">
-          {apiError}
-        </div>
-      )}
-
       {/* Email - read only */}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
