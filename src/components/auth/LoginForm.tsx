@@ -3,7 +3,6 @@ import { useLoginForm } from "../hooks/useLoginForm";
 import { Button } from "@/components/ui/button";
 import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
-import FormErrors from "./FormErrors";
 import type { AuthResponse } from "@/types";
 import { Loader2 } from "lucide-react";
 
@@ -14,8 +13,6 @@ interface LoginFormProps {
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const { data, errors, isLoading, isSubmitted, handleInputChange, performLoginAttempt } = useLoginForm(onSuccess);
 
-  const formErrors = errors.form ? [errors.form] : [];
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -24,8 +21,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      {formErrors.length > 0 && <FormErrors errors={formErrors} />}
-
       <EmailInput
         value={data.email}
         onChange={handleInputChange}

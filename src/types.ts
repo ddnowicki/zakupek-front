@@ -118,6 +118,13 @@ export interface ShoppingListDetailResponse {
   products: ProductInListResponse[];
 }
 
+export interface UpdateUserProfileRequest {
+  userName?: string;
+  householdSize?: number;
+  ages?: number[];
+  dietaryPreferences?: string[];
+}
+
 export enum ProductStatus {
   Pending = 1,
   InCart = 2,

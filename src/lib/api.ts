@@ -7,10 +7,9 @@ import type {
   ShoppingListDetailResponse,
   ShoppingListsResponse,
   UpdateShoppingListRequest,
+  UpdateUserProfileRequest,
   UserProfileResponse,
 } from "../types";
-
-const API_BASE_URL = import.meta.env.PUBLIC_API_BASE_URL || "https://localhost:5133";
 
 export interface ApiErrorPayload {
   message?: string;
@@ -31,7 +30,7 @@ export class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
 
-  constructor(baseUrl: string = API_BASE_URL) {
+  constructor(baseUrl: string = import.meta.env.PUBLIC_API_URL) {
     this.baseUrl = baseUrl;
   }
 
@@ -122,6 +121,13 @@ export class ApiClient {
 
   async getProfile(): Promise<UserProfileResponse> {
     return this.fetchWithAuth<UserProfileResponse>("/api/users/profile");
+  }
+
+  async updateProfile(data: UpdateUserProfileRequest): Promise<boolean> {
+    return this.fetchWithAuth<boolean>('/api/users/profile', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
   }
 
   async getShoppingLists(page = 1, pageSize = 10, sort = "newest"): Promise<ShoppingListsResponse> {

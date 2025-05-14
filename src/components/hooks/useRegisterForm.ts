@@ -4,6 +4,7 @@ import { ApiClient, HandledError } from "@/lib/api";
 import type { AuthResponse } from "@/types";
 import { registerSchema } from "@/lib/validation";
 import { useNavigate } from "@/lib/hooks/useNavigate";
+import { toast } from "sonner";
 
 export interface RegisterFormData {
   email: string;
@@ -22,7 +23,6 @@ export interface RegisterFormErrors {
   userName?: string;
   householdSize?: string;
   ages?: string[];
-  form?: string;
 }
 
 export interface RegisterFormState {
@@ -74,7 +74,7 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
             [name]: value,
             ages: newAges,
           },
-          errors: { ...prev.errors, [name]: undefined, ages: undefined, form: undefined },
+          errors: { ...prev.errors, [name]: undefined },
         };
       }
 
@@ -85,14 +85,14 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
         return {
           ...prev,
           data: { ...prev.data, ages: newAges },
-          errors: { ...prev.errors, ages: undefined, form: undefined },
+          errors: { ...prev.errors, ages: undefined },
         };
       }
 
       return {
         ...prev,
         data: { ...prev.data, [name]: value },
-        errors: { ...prev.errors, [name]: undefined, form: undefined },
+        errors: { ...prev.errors, [name]: undefined },
       };
     });
   };
@@ -102,7 +102,7 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
       ...state.data,
       ages: state.data.ages.map((age) => age || "0"),
     });
-
+    
     if (result.success) {
       return { isValid: true, errors: {} };
     }
@@ -121,7 +121,7 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
   };
 
   const performRegistration = async () => {
-    setState((prev) => ({ ...prev, isSubmitted: true, errors: { ...prev.errors, form: undefined } }));
+    setState((prev) => ({ ...prev, isSubmitted: true }));
 
     const validationResult = validateForm();
     if (!validationResult.isValid) {
@@ -146,25 +146,33 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
         onSuccess(response);
       }
 
+      toast.success("Rejestracja zakończona pomyślnie!");
+
       const params = new URLSearchParams(window.location.search);
       const redirectUrl = params.get('redirectUrl');
       navigate(redirectUrl || "/lists");
     } catch (error: unknown) {
-      let formErrorMessage = "Wystąpił nieznany błąd podczas rejestracji.";
-
       if (error instanceof HandledError) {
-        formErrorMessage = error.message;
+        if (error.status === 409) {
+          toast.error("Błąd rejestracji", {
+            description: "Ten adres email jest już zajęty."
+          });
+        } else {
+          toast.error("Błąd rejestracji", {
+            description: error.message
+          });
+        }
       } else if (error instanceof Error) {
-        formErrorMessage = error.message;
+        toast.error("Błąd rejestracji", {
+          description: error.message
+        });
+      } else {
+        toast.error("Wystąpił nieznany błąd podczas rejestracji.");
       }
 
       setState((prev) => ({
         ...prev,
-        isLoading: false,
-        errors: {
-          ...prev.errors,
-          form: formErrorMessage,
-        },
+        isLoading: false
       }));
     }
   };

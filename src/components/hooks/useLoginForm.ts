@@ -3,6 +3,7 @@ import { AuthService } from "@/lib/services/auth";
 import { ApiClient, HandledError } from "@/lib/api";
 import type { AuthResponse, LoginRequest } from "@/types";
 import { loginSchema } from "@/lib/validation";
+import { toast } from "sonner";
 
 export interface LoginFormData extends LoginRequest {
   email: string;
@@ -12,7 +13,6 @@ export interface LoginFormData extends LoginRequest {
 export interface LoginFormErrors {
   email?: string;
   password?: string;
-  form?: string;
 }
 
 export interface LoginFormState {
@@ -46,12 +46,13 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
     setState((prev) => ({
       ...prev,
       data: { ...prev.data, [name]: value },
-      errors: { ...prev.errors, [name]: undefined, form: undefined },
+      errors: { ...prev.errors, [name]: undefined },
     }));
   };
 
   const validateForm = (): { isValid: boolean; errors: LoginFormErrors } => {
     const result = loginSchema.safeParse(state.data);
+    
     if (result.success) {
       return { isValid: true, errors: {} };
     }
@@ -67,7 +68,7 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
   };
 
   const performLoginAttempt = async () => {
-    setState((prev) => ({ ...prev, isSubmitted: true, errors: { ...prev.errors, form: undefined } }));
+    setState((prev) => ({ ...prev, isSubmitted: true }));
 
     const validationResult = validateForm();
     if (!validationResult.isValid) {
@@ -79,26 +80,9 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
 
     try {
       const response = await authService.login(state.data);
-
-      // Debug - log response
-      console.log('Login response:', {
-        userId: response.userId,
-        userName: response.userName,
-        token: response.accessToken,
-        expiresAt: response.expiresAt
-      });
-
-      // Save auth data
       localStorage.setItem("token", response.accessToken);
       localStorage.setItem("token_expires", response.expiresAt);
       localStorage.setItem("user_id", response.userId.toString());
-
-      // Debug - verify saved data
-      console.log('Saved in localStorage:', {
-        token: localStorage.getItem("token"),
-        expires: localStorage.getItem("token_expires"),
-        userId: localStorage.getItem("user_id")
-      });
 
       if (onSuccess) {
         onSuccess(response);
@@ -113,31 +97,28 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
         redirectTo: redirectUrl || "/lists",
       }));
 
-      // Debug - log before navigation
-      console.log('Redirecting to', redirectUrl || "/lists", 'with token:', localStorage.getItem("token"));
-
     } catch (error: unknown) {
-      let formErrorMessage = "Wystąpił nieznany błąd podczas logowania.";
-
       if (error instanceof HandledError) {
         if (error.status === 401) {
-          formErrorMessage = "Nieprawidłowy login lub hasło.";
-        } else if (error.message) {
-          formErrorMessage = error.message;
+          toast.error("Błąd logowania", {
+            description: "Nieprawidłowy login lub hasło."
+          });
+        } else {
+          toast.error("Błąd logowania", {
+            description: error.message
+          });
         }
       } else if (error instanceof Error) {
-        formErrorMessage = error.message;
+        toast.error("Błąd logowania", {
+          description: error.message
+        });
+      } else {
+        toast.error("Wystąpił nieznany błąd podczas logowania.");
       }
-
-      console.error('Login error:', error);
 
       setState((prev) => ({
         ...prev,
-        isLoading: false,
-        errors: {
-          ...prev.errors,
-          form: formErrorMessage,
-        },
+        isLoading: false
       }));
     }
   };
