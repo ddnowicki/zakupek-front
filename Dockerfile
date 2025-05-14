@@ -5,12 +5,12 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build && \
-    echo "== ZAWARTOŚĆ /app/dist ==" && ls -al /app/dist
+RUN npm run build
 
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-RUN echo "== ZAWARTOŚĆ /usr/share/nginx/html ==" && ls -al /usr/share/nginx/html
+FROM node:20
+WORKDIR /app
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=builder /app .
+
+EXPOSE 3000
+CMD ["npm", "run", "preview"]
