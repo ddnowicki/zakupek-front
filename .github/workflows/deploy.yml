@@ -1,0 +1,33 @@
+name: Deploy Astro App
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create .env file
+      run: echo 'PUBLIC_API_URL="${{ secrets.PUBLIC_API_URL }}"' > .env
+
+    - name: Build Docker image
+      run: docker build -t ${{ vars.CONTAINER_NAME }} .
+
+    - name: Stop existing container
+      run: docker container stop ${{ vars.CONTAINER_NAME }} || true
+
+    - name: Remove existing container
+      run: docker container rm ${{ vars.CONTAINER_NAME }} || true
+
+    - name: Run new container
+      run: |
+        docker run --detach \
+          --name ${{ vars.CONTAINER_NAME }} \
+          --publish ${{ vars.PORT }}:80 \
+          --restart always \
+          ${{ vars.CONTAINER_NAME }}
