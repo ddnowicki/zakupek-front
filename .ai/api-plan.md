@@ -60,6 +60,37 @@
    - **Success Codes:** 200 OK
    - **Error Codes:** 401 Unauthorized
 
+3. **Update User Profile**
+   - **Method:** PUT
+   - **URL:** `/api/users/profile`
+   - **Description:** Updates authenticated user's profile details.
+   - **Headers:** `Authorization: Bearer {token}`
+   - **Request Body Example:**
+     ```json
+     {
+       "userName": "JohnDoe",
+       "householdSize": 4,
+       "ages": [30, 28, 5, 2],
+       "dietaryPreferences": ["vegetarian", "gluten-free", "dairy-free"]
+     }
+     ```
+   - **Response Example:**
+     ```json
+     {
+       "id": 1,
+       "email": "user@example.com",
+       "userName": "JohnDoe",
+       "householdSize": 4,
+       "ages": [30, 28, 5, 2],
+       "dietaryPreferences": ["vegetarian", "gluten-free", "dairy-free"],
+       "createdAt": "2025-04-10T12:00:00Z",
+       "updatedAt": "2025-04-15T14:30:00Z",
+       "listsCount": 5
+     }
+     ```
+   - **Success Codes:** 200 OK
+   - **Error Codes:** 400 Bad Request, 401 Unauthorized
+
 ### Authentication
 1. **User Login**
    - **Method:** POST

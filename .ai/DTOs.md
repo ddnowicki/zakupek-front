@@ -29,6 +29,18 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 - Email: NotEmpty, EmailAddress
 - Password: NotEmpty
 
+### UpdateUserProfileRequest (record)
+- UserName: string
+- HouseholdSize: int? optional
+- Ages: List<int>? optional
+- DietaryPreferences: List<string>? optional
+
+**Validation (UpdateUserProfileRequestValidator):**
+- UserName: NotEmpty
+- HouseholdSize: GreaterThanOrEqualTo(1) when provided
+- Ages: Count must match HouseholdSize when both provided, all values > 0
+- DietaryPreferences: each preference must not be empty when provided
+
 ---
 
 ## Auth.Response
