@@ -25,6 +25,12 @@ Zakupek is a web application designed to simplify and streamline the creation of
 - **Tailwind CSS 4** – Utility-first styling
 - **Shadcn/ui** – Prebuilt React component library
 
+### Testing
+- **Vitest** – Unit and component testing for Astro and React components
+- **Playwright** – End-to-end testing with cross-browser support
+- **Testing Library** – Component testing utilities
+- **MSW (Mock Service Worker)** – API mocking for tests
+
 ### Backend & Services
 - **.NET 8 & ASP.NET Core** – High-performance REST API
 - **Entity Framework Core** – ORM with code-first migrations

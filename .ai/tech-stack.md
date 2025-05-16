@@ -6,6 +6,20 @@ Frontend:
 - Tailwind 4 pozwala na wygodne stylowanie aplikacji
 - Shadcn/ui zapewnia bibliotekę dostępnych komponentów React, na których oprzemy UI
 
+Testy:
+
+- Testy jednostkowe:
+  - Vitest jako szybki i kompatybilny z Vite framework do testów jednostkowych
+  - Testing Library dla testowania komponentów React w sposób skupiający się na UI
+  - MSW (Mock Service Worker) do mockowania API w testach
+  - Happy-DOM lub jsdom jako środowisko uruchomieniowe dla testów
+
+- Testy e2e:
+  - Playwright dla kompleksowych testów end-to-end z obsługą wielu przeglądarek
+  - Możliwość nagrywania testów i generowania kodu
+  - Testy wizualne i porównywanie migawek interfejsu
+  - Możliwość równoległego uruchamiania testów
+
 Backend:
 
 - .NET 8
