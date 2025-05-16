@@ -1,11 +1,11 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import { Toaster } from 'sonner';
-import '../styles/global.css';
-import { ProfileDropdown } from '../components/dashboard/ProfileDropdown';
+import { ViewTransitions } from "astro:transitions";
+import { Toaster } from "sonner";
+import "../styles/global.css";
+import { ProfileDropdown } from "../components/dashboard/ProfileDropdown";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -13,40 +13,78 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="pl">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.png" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<ViewTransitions />
-	</head>
-	<body class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-screen">
-		<header class="py-4 px-6 bg-white dark:bg-gray-800 shadow-md shrink-0">
-			<div class="container mx-auto flex justify-between items-center">
-				<a href="/" class="text-2xl font-bold text-gray-800 dark:text-white" id="homeLink">Zakupek</a>
-				<ProfileDropdown client:load />
-			</div>
-		</header>
-		<main class="flex-grow flex flex-col">
-			<slot />
-		</main>
-		<Toaster richColors closeButton position="top-right" client:load />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-screen">
+    <header class="py-4 px-6 bg-white dark:bg-gray-800 shadow-md shrink-0">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="/" class="text-2xl font-bold text-gray-800 dark:text-white" id="homeLink">Zakupek</a>
+        <ProfileDropdown client:load />
+      </div>
+    </header>
+    <main class="flex-grow flex flex-col">
+      <slot />
+    </main>
+    <Toaster position="top-right" richColors closeButton theme="light" client:load />
 
-		<script>
-			// Update home link based on authentication status
-			const homeLink = document.getElementById('homeLink') as HTMLAnchorElement;
-			if (homeLink && localStorage.getItem('token')) {
-				homeLink.href = '/lists';
-			}
-		</script>
-	</body>
+    <script>
+      // Update home link based on authentication status
+      const homeLink = document.getElementById("homeLink") as HTMLAnchorElement;
+      if (homeLink && localStorage.getItem("token")) {
+        homeLink.href = "/lists";
+      }
+    </script>
+  </body>
 </html>
 
 <style>
   html,
   body {
     margin: 0;
+  }
+
+  :global(.sonner-toast-container) {
+    --viewport-padding: 16px;
+    position: fixed;
+    top: var(--viewport-padding);
+    right: var(--viewport-padding);
+    bottom: auto; /* Override any bottom positioning */
+    left: auto;
+  }
+
+  /* Ensure toasts have good contrast and readable text */
+  :global(.sonner-toast) {
+    --border-radius: 8px;
+    --font-size: 14px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: var(--font-size);
+    max-width: 350px;
+    width: 100%;
+  }
+
+  :global(.sonner-toast[data-type="error"]) {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border-left: 4px solid #dc2626;
+  }
+
+  :global(.sonner-toast[data-type="success"]) {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border-left: 4px solid #22c55e;
+  }
+
+  :global(.sonner-toast[data-type="info"]) {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-left: 4px solid #3b82f6;
   }
 </style>
