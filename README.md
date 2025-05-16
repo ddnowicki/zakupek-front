@@ -10,11 +10,12 @@
 3. [Getting Started](#getting-started)
 4. [Available Scripts](#available-scripts)
 5. [Project Scope](#project-scope)
-6. [Project Status](#project-status)
-7. [License](#license)
+6. [Success Metrics](#success-metrics)
+7. [Project Status](#project-status)
+8. [License](#license)
 
 ## Project Description
-Zakupek is a web application designed to simplify and streamline the creation of shopping lists by leveraging AI-driven recommendations and user purchase history. Users can generate personalized shopping lists, edit them manually, and review past lists to make better shopping decisions.
+Zakupek is a web application designed to simplify and streamline the creation of shopping lists by leveraging AI-driven recommendations and user purchase history. Users can generate personalized shopping lists based on household demographics and dietary preferences, edit them manually, and review past lists to make better shopping decisions. The application addresses the common problem of time wasted on creating repetitive shopping lists and forgetting important items by automating the process with AI technology.
 
 ## Tech Stack
 
@@ -32,8 +33,9 @@ Zakupek is a web application designed to simplify and streamline the creation of
 - **Scrutor** – Assembly scanning and DI registration
 - **FluentValidation** – Fluent model validation
 - **ErrorOr** – Unified error handling
+- **JWT Authentication** – Secure token-based authentication
 - **Supabase** – Authentication and database
-- **Openrouter.ai** – AI model integration for generating lists
+- **OpenRouter.ai** – AI integration using deepseek/deepseek-prover-v2:free model for generating lists
 
 ### CI/CD & Hosting
 - **GitHub Actions** – Automated workflows
@@ -86,19 +88,29 @@ Open your browser at `http://localhost:3000` to view the app.
 ## Project Scope
 
 ### Core Features (MVP)
-- **User Authentication** – Register and log in via email/password
-- **Profile Setup** – Capture household size, ages, and dietary preferences
-- **AI-powered List Generation** – Generate shopping lists based on user history, seasonality, and household size
-- **Manual List Management** – Create, edit, and delete lists; schedule purchase dates; assign stores
-- **Item Status Tracking** – Mark items as “to buy” or “bought” in real time
-- **History & Search** – Browse, sort, and paginate previous lists; basic product search
+- **User Authentication** – Register and log in via email/password with JWT token authentication
+- **Profile Setup** – Capture household size, ages, and dietary preferences for personalized recommendations
+- **AI-powered List Generation** – Generate shopping lists based on:
+  - User purchase history (up to 5 previous lists)
+  - Household demographics
+  - Dietary preferences
+  - Seasonal considerations
+- **Manual List Management** – Create, edit, and delete lists; schedule purchase dates; assign specific stores
+- **Item Status Tracking** – Track products with statuses (AI generated, Partially by AI, Manual, Deleted)
+- **History & Search** – Browse, sort (newest, oldest, alphabetically), and paginate previous lists; basic product search
 
 ### Out of Scope for MVP
-- Brand-specific recommendations
-- Advanced filtering and reporting
+- Brand-specific product recommendations
+- Advanced filtering and reporting systems
 - List sharing with other users
 - Receipt validation
 - Mobile-specific app (web-only MVP)
+
+## Success Metrics
+- **AI Recommendation Acceptance Rate** – At least 75% of AI-suggested items are kept by users
+- **AI Utilization Rate** – 75% of all created lists use AI generation
+- **User Engagement** – Growth in active accounts and login frequency
+- **Time Efficiency** – Measurable reduction in time needed to create shopping lists compared to traditional methods
 
 ## Project Status
 This project is currently in **Active Development**. The MVP stage has been implemented, and further improvements and features are planned for upcoming releases.

@@ -11,25 +11,27 @@ Użytkownicy często tracą czas na ręczne tworzenie list zakupów, a dodatkowo
 ## 3. Wymagania funkcjonalne
 
 1. Rejestracja i logowanie użytkowników w celu przechowywania spersonalizowanych list:
-    - Podawanie liczby i wieku domowników
-    - Podawanie preferencji żywieniowych
-    - Rejestracja poprzez podanie adresu e-mail, hasła oraz nazwy użytkownika
+  - Podawanie liczby i wieku domowników
+  - Podawanie preferencji żywieniowych
+  - Rejestracja poprzez podanie adresu e-mail, hasła oraz nazwy użytkownika
 2. Automatyczne generowanie list zakupów z wykorzystaniem AI:
-    - Analiza historii poprzednich zakupów
-    - Uwzględnianie sezonowości produktów
-    - Dopasowywanie ilości produktów do liczby domowników
+  - Analiza historii poprzednich zakupów
+  - Uwzględnianie sezonowości produktów
+  - Dopasowywanie ilości produktów do liczby domowników
+  - Generowanie list przy użyciu modelu AI z OpenRouter (deepseek/deepseek-prover-v2:free)
+  - Zwracanie produktów w języku polskim z sugerowanymi ilościami
 3. Ręczne tworzenie, edycja i usuwanie list zakupów:
-    - Dodawanie nowych pozycji i ich ilości
-    - Redagowanie wybranych elementów
-    - Usuwanie zbędnych pozycji
-    - Planowanie daty zakupów
-    - Przypisywanie listy do określonego sklepu
+  - Dodawanie nowych pozycji i ich ilości
+  - Redagowanie wybranych elementów
+  - Usuwanie zbędnych pozycji
+  - Planowanie daty zakupów
+  - Przypisywanie listy do określonego sklepu
 4. Zarządzanie statusem produktów na liście:
-    - Oznaczanie produktów jako "do kupienia" lub "kupione"
-    - Śledzenie zmian statusu produktów w czasie rzeczywistym
+  - Oznaczanie produktów z wykorzystaniem statusów (AI generated, Partially by AI, Manual, Deleted)
+  - Śledzenie zmian statusu produktów przy edycji list
 5. Przeglądanie poprzednich list zapisanych w historii konta:
-    - Sortowanie list według różnych kryteriów (najnowsze, najstarsze, alfabetycznie)
-    - Paginacja wyników dla lepszej nawigacji
+  - Sortowanie list według różnych kryteriów (najnowsze, najstarsze, alfabetycznie)
+  - Paginacja wyników dla lepszej nawigacji
 6. Podstawowa wyszukiwarka produktów w czasie tworzenia lub edycji listy.
 7. Brak rekomendacji związanych z konkretnymi markami w ramach MVP.
 8. Brak rozbudowanych filtrów i zaawansowanego systemu raportowania (przeznaczone na dalsze etapy).
@@ -37,11 +39,11 @@ Użytkownicy często tracą czas na ręczne tworzenie list zakupów, a dodatkowo
 ## 4. Granice produktu
 
 1. Wyłączone z MVP:
-    - Współdzielenie list z innymi użytkownikami
-    - Walidacja paragonów
-    - Wersje mobilne (rozwiązanie ogranicza się do wersji webowej w MVP)
-    - Propozycje konkretnych marek produktów
-    - Zaawansowane raporty i analizy dostępne bezpośrednio dla użytkownika
+  - Współdzielenie list z innymi użytkownikami
+  - Walidacja paragonów
+  - Wersje mobilne (rozwiązanie ogranicza się do wersji webowej w MVP)
+  - Propozycje konkretnych marek produktów
+  - Zaawansowane raporty i analizy dostępne bezpośrednio dla użytkownika
 2. Analiza logów oraz raportów będzie dostępna tylko dla zespołu tworzącego aplikację.
 3. W MVP nie przewiduje się żadnych dodatkowych ograniczeń prawnych w zakresie przetwarzania danych poza standardowymi wymogami prawnymi.
 4. Uwierzytelnianie będzie realizowane poprzez tokeny JWT (JSON Web Tokens).
@@ -69,32 +71,43 @@ Kryteria akceptacji:
 Opis: Jako zalogowany użytkownik chcę utworzyć nową listę zakupów, podając tytuł, datę zakupów, sklep oraz pozycje.
 Kryteria akceptacji:
 - POST /api/shoppinglists zwraca ShoppingListDetailResponse ze szczegółami utworzonej listy
+- Tytuł listy jest opcjonalny
+- Każdy produkt musi mieć nazwę i ilość większą od 0
+- Nowo utworzone listy mają status "Manual"
 
 ### US-005 Pobranie listy list zakupów
 Opis: Jako zalogowany użytkownik chcę przeglądać moje listy zakupów z paginacją i sortowaniem.
 Kryteria akceptacji:
 - GET /api/shoppinglists?Page=&PageSize=&Sort= zwraca ShoppingListsResponse z listą wyników i metadanymi
+- Sort może przyjmować wartości: "newest" (domyślna), "oldest", "name"
+- Paginacja obsługuje parametry Page (domyślnie 1) i PageSize (domyślnie 10)
 
 ### US-006 Pobranie szczegółów listy zakupów
 Opis: Jako zalogowany użytkownik chcę pobrać szczegóły konkretnej listy zakupów.
 Kryteria akceptacji:
 - GET /api/shoppinglists/{id} zwraca ShoppingListDetailResponse dla podanego identyfikatora
+- Response zawiera pełną listę produktów z ich statusami i ilościami
 
 ### US-007 Edycja listy zakupów
 Opis: Jako zalogowany użytkownik chcę zaktualizować istniejącą listę zakupów, edytując tytuł, datę, nazwę sklepu oraz pozycje. Wszystkie pozycje przesyłane w polu `products` stanowią pełny zestaw — pominięcie istniejącej pozycji oznacza jej usunięcie.
 Kryteria akceptacji:
 - PUT /api/shoppinglists/{id} zwraca wartość boolean `true` przy pomyślnej aktualizacji
 - Request Body zawiera `storeName` zamiast `storeId` oraz pełną listę `products`
+- Edycja listy wygenerowanej przez AI zmienia jej status na "Partially by AI"
 
 ### US-008 Usuwanie listy zakupów
 Opis: Jako zalogowany użytkownik chcę usunąć istniejącą listę zakupów.
 Kryteria akceptacji:
 - DELETE /api/shoppinglists/{id} zwraca wartość true przy udanym usunięciu
+- Usunięcie listy powoduje kaskadowe usunięcie wszystkich jej produktów
 
 ### US-009 Generowanie listy zakupów
 Opis: Jako zalogowany użytkownik chcę wygenerować listę zakupów z wykorzystaniem AI na podstawie historii i preferencji.
 Kryteria akceptacji:
 - POST /api/shoppinglists/generate zwraca ShoppingListDetailResponse z wygenerowaną listą
+- AI korzysta z: historii poprzednich list (do 5), wieku domowników, wielkości gospodarstwa domowego i preferencji żywieniowych
+- Nazwy produktów generowane są w języku polskim
+- Produkty mają status "AI generated"
 
 ## 6. Metryki sukcesu
 
