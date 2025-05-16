@@ -52,7 +52,7 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
 
   const validateForm = (): { isValid: boolean; errors: LoginFormErrors } => {
     const result = loginSchema.safeParse(state.data);
-    
+
     if (result.success) {
       return { isValid: true, errors: {} };
     }
@@ -89,28 +89,27 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
       }
 
       const params = new URLSearchParams(window.location.search);
-      const redirectUrl = params.get('redirectUrl');
+      const redirectUrl = params.get("redirectUrl");
 
       setState((prev) => ({
         ...prev,
         isLoading: false,
         redirectTo: redirectUrl || "/lists",
       }));
-
     } catch (error: unknown) {
       if (error instanceof HandledError) {
         if (error.status === 401) {
           toast.error("Błąd logowania", {
-            description: "Nieprawidłowy login lub hasło."
+            description: "Nieprawidłowy login lub hasło.",
           });
         } else {
           toast.error("Błąd logowania", {
-            description: error.message
+            description: error.message,
           });
         }
       } else if (error instanceof Error) {
         toast.error("Błąd logowania", {
-          description: error.message
+          description: error.message,
         });
       } else {
         toast.error("Wystąpił nieznany błąd podczas logowania.");
@@ -118,7 +117,7 @@ export function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
 
       setState((prev) => ({
         ...prev,
-        isLoading: false
+        isLoading: false,
       }));
     }
   };

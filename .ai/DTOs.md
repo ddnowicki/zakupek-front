@@ -7,6 +7,7 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 ## Auth.Request
 
 ### RegisterRequest (class)
+
 - Email: string, required
 - Password: string, required
 - UserName: string, required
@@ -15,6 +16,7 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 - DietaryPreferences: List<string>? optional
 
 **Validation (RegisterRequestValidator):**
+
 - Email: NotEmpty, EmailAddress
 - Password: NotEmpty, MinimumLength(6), contains uppercase, number, special character
 - UserName: NotEmpty
@@ -22,20 +24,24 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 - Ages (when not null): all > 0, Count == HouseholdSize
 
 ### LoginRequest (class)
+
 - Email: string, required
 - Password: string, required
 
 **Validation (LoginRequestValidator):**
+
 - Email: NotEmpty, EmailAddress
 - Password: NotEmpty
 
 ### UpdateUserProfileRequest (record)
+
 - UserName: string
 - HouseholdSize: int? optional
 - Ages: List<int>? optional
 - DietaryPreferences: List<string>? optional
 
 **Validation (UpdateUserProfileRequestValidator):**
+
 - UserName: NotEmpty
 - HouseholdSize: GreaterThanOrEqualTo(1) when provided
 - Ages: Count must match HouseholdSize when both provided, all values > 0
@@ -46,6 +52,7 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 ## Auth.Response
 
 ### AuthResponse (record)
+
 - UserId: int
 - UserName: string
 - AccessToken: string
@@ -54,6 +61,7 @@ This document lists all request and response DTOs in the `ZakupekApi.Wrapper.Con
 _No validation_
 
 ### UserProfileResponse (record)
+
 - Id: int
 - Email: string
 - UserName: string
@@ -70,6 +78,7 @@ _No validation_
 ## ShoppingLists.Request
 
 ### GetShoppingListsRequest (class)
+
 - Page: int, default=1 [QueryParam]
 - PageSize: int, default=10 [QueryParam]
 - Sort: string, default="newest" [QueryParam]
@@ -77,64 +86,77 @@ _No validation_
 _No validation_
 
 ### GetShoppingListByIdRequest (class)
+
 - Id: int [BindFrom("id")]
 
 _No validation_
 
 ### CreateShoppingListRequest (record)
+
 - Title: string? optional
 - Products: IEnumerable<ProductRequest>? optional
 - PlannedShoppingDate: DateTime? optional
 - StoreName: string? optional
 
 **Validation (CreateShoppingListValidator):**
+
 - Title: MaximumLength(100)
 - Products: each ProductRequest validated
 
 #### ProductRequest (record)
+
 - Name: string
 - Quantity: int
 
 **Validation (ProductRequestValidator):**
+
 - Name: NotEmpty, MaximumLength(100)
 - Quantity: GreaterThan(0)
 
 ### UpdateShoppingListEndpointRequest (record)
+
 - Id: int [BindFrom("id")]
 - Body: UpdateShoppingListRequest [FromBody]
 
 _No direct validation_
 
 ### UpdateShoppingListRequest (record)
+
 - Title: string? optional
 - Products: IEnumerable<UpdateProductRequest>? optional
 - PlannedShoppingDate: DateTime? optional
 - StoreName: string? optional
 
 **Validation (UpdateShoppingListValidator):**
+
 - Title: MaximumLength(100)
 - Products: each UpdateProductRequest validated
 
 #### UpdateProductRequest (record)
+
 - Id: int? optional
 - Name: string
 - Quantity: int
 
 **Validation (UpdateProductRequestValidator):**
+
 - Name: NotEmpty, MaximumLength(100)
 - Quantity: GreaterThan(0)
 
 ### DeleteShoppingListRequest (class)
+
 - Id: int [BindFrom("id")]
 
 _No validation_
 
 ### GenerateShoppingListRequest (record)
+
 - Title: string? optional
 - PlannedShoppingDate: DateTime? optional
 - StoreName: string? optional
 
 **Validation (GenerateShoppingListValidator):**
+
 - Title: MaximumLength(100)
 
 ---
@@ -142,6 +164,7 @@ _No validation_
 ## ShoppingLists.Response
 
 ### PaginationMetadata (record)
+
 - Page: int
 - PageSize: int
 - TotalItems: int
@@ -150,12 +173,14 @@ _No validation_
 _No validation_
 
 ### ShoppingListsResponse (record)
+
 - Data: IEnumerable<ShoppingListResponse>
 - Pagination: PaginationMetadata
 
 _No validation_
 
 ### ShoppingListResponse (record)
+
 - Id: int
 - Title: string? optional
 - ProductsCount: int
@@ -165,6 +190,7 @@ _No validation_
 _No validation_
 
 ### ProductInListResponse (record)
+
 - Id: int
 - Name: string
 - Quantity: int
@@ -175,6 +201,7 @@ _No validation_
 _No validation_
 
 ### ShoppingListDetailResponse (record)
+
 - Id: int
 - Title: string? optional
 - CreatedAt: DateTime

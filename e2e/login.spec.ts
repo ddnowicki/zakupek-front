@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from './pages/LoginPage';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "./pages/LoginPage";
 
-test.describe('Login functionality', () => {
-  test('should display login form', async ({ page }) => {
+test.describe("Login functionality", () => {
+  test("should display login form", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
@@ -13,11 +13,11 @@ test.describe('Login functionality', () => {
     await expect(loginPage.registerLink).toBeVisible();
   });
 
-  test('should navigate to register page', async ({ page }) => {
+  test("should navigate to register page", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.navigateToRegister();
-    
+
     // Check if we've navigated to the register page
     await expect(page).toHaveURL(/.*\/register/);
   });

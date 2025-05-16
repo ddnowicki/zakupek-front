@@ -20,8 +20,8 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
   }
 
   const handleNameChange = (productId: number, newName: string | number) => {
-    if (typeof newName === 'string') {
-      const product = products.find(p => p.id === productId);
+    if (typeof newName === "string") {
+      const product = products.find((p) => p.id === productId);
       if (product) {
         onUpdateProduct({ id: productId, name: newName, quantity: product.quantity });
       }
@@ -31,7 +31,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
   const handleQuantityChange = (productId: number, newQuantity: string | number) => {
     const quantity = Number(newQuantity);
     if (!isNaN(quantity) && quantity > 0) {
-      const product = products.find(p => p.id === productId);
+      const product = products.find((p) => p.id === productId);
       if (product) {
         onUpdateProduct({ id: productId, name: product.name, quantity: quantity });
       }
@@ -41,11 +41,11 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
   };
 
   const handleNewProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewProductInput(prev => ({ ...prev, name: e.target.value }));
+    setNewProductInput((prev) => ({ ...prev, name: e.target.value }));
   };
 
   const handleNewProductQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewProductInput(prev => ({ ...prev, quantity: e.target.value }));
+    setNewProductInput((prev) => ({ ...prev, quantity: e.target.value }));
   };
 
   const commitNewProduct = () => {
@@ -57,9 +57,11 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
     }
   };
 
-  const handleNewProductInputEvent = (event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) => {
-    if (event.type === 'blur' || (event.type === 'keydown' && (event as React.KeyboardEvent).key === 'Enter')) {
-      if (event.type === 'keydown' && (event as React.KeyboardEvent).key === 'Enter') {
+  const handleNewProductInputEvent = (
+    event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>
+  ) => {
+    if (event.type === "blur" || (event.type === "keydown" && (event as React.KeyboardEvent).key === "Enter")) {
+      if (event.type === "keydown" && (event as React.KeyboardEvent).key === "Enter") {
         event.preventDefault();
       }
       const nameIsFilled = newProductInput.name.trim() !== "";
@@ -110,7 +112,12 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
                 <StatusBadge status={product.status} />
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <Button variant="link" size="sm" onClick={() => onDeleteProduct(product.id)} className="text-red-600 hover:text-red-800">
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => onDeleteProduct(product.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
                   Usuń
                 </Button>
               </td>
@@ -141,7 +148,12 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onUpdateProduct, 
             </td>
             <td className="px-6 py-4 whitespace-nowrap"></td>
             <td className="px-6 py-4 whitespace-nowrap">
-              <Button variant="outline" size="sm" onClick={commitNewProduct} disabled={!newProductInput.name.trim() || !(parseInt(newProductInput.quantity, 10) > 0)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={commitNewProduct}
+                disabled={!newProductInput.name.trim() || !(parseInt(newProductInput.quantity, 10) > 0)}
+              >
                 Dodaj
               </Button>
             </td>

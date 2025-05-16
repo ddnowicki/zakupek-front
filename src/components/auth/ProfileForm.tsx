@@ -1,16 +1,16 @@
-import React from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import DietaryCombobox from './DietaryCombobox';
-import type { UpdateUserProfileRequest, UserProfileResponse } from '../../types';
-import { useId } from 'react';
-import { toast } from 'sonner';
-import { profileSchema } from '@/lib/validation';
-import type { z } from 'zod';
+import React from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import DietaryCombobox from "./DietaryCombobox";
+import type { UpdateUserProfileRequest, UserProfileResponse } from "../../types";
+import { useId } from "react";
+import { toast } from "sonner";
+import { profileSchema } from "@/lib/validation";
+import type { z } from "zod";
 
 interface ProfileFormProps {
-  initialData: Omit<UserProfileResponse, 'id' | 'email' | 'createdAt' | 'listsCount'>;
+  initialData: Omit<UserProfileResponse, "id" | "email" | "createdAt" | "listsCount">;
   onSubmit: (data: UpdateUserProfileRequest) => Promise<boolean>;
   isLoading: boolean;
   apiError: string | null;
@@ -18,20 +18,13 @@ interface ProfileFormProps {
   listsCount?: number;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({
-  initialData,
-  onSubmit,
-  isLoading,
-  apiError,
-  email,
-  listsCount
-}) => {
+const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit, isLoading, apiError, email, listsCount }) => {
   const formId = useId();
   const [formData, setFormData] = React.useState({
-    userName: initialData.userName || '',
-    householdSize: initialData.householdSize?.toString() || '',
-    ages: initialData.ages?.map(age => age.toString()) || [],
-    dietaryPreferences: initialData.dietaryPreferences || []
+    userName: initialData.userName || "",
+    householdSize: initialData.householdSize?.toString() || "",
+    ages: initialData.ages?.map((age) => age.toString()) || [],
+    dietaryPreferences: initialData.dietaryPreferences || [],
   });
   const [validationErrors, setValidationErrors] = React.useState<Record<string, string>>({});
 
@@ -46,16 +39,16 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       } catch {
         // If parsing fails, use the original error message
       }
-      
+
       toast.error("Błąd aktualizacji profilu", {
-        description: errorMessage
+        description: errorMessage,
       });
     }
   }, [apiError]);
 
   const validateForm = () => {
     const result = profileSchema.safeParse(formData);
-    
+
     if (result.success) {
       setValidationErrors({});
       return true;
@@ -63,22 +56,22 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
     const errors: Record<string, string> = {};
     result.error.errors.forEach((error) => {
-      const path = error.path.join('.');
-      if (error.path[0] === 'ages' && error.path.length > 1) {
+      const path = error.path.join(".");
+      if (error.path[0] === "ages" && error.path.length > 1) {
         // Handle individual age errors
         errors[`age_${error.path[1]}`] = error.message;
       } else {
         errors[path] = error.message;
       }
     });
-    
+
     setValidationErrors(errors);
     return false;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -86,8 +79,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     const updateData: UpdateUserProfileRequest = {
       userName: formData.userName,
       householdSize: formData.householdSize ? parseInt(formData.householdSize) : undefined,
-      ages: formData.householdSize ? formData.ages.map(age => parseInt(age)) : undefined,
-      dietaryPreferences: formData.dietaryPreferences
+      ages: formData.householdSize ? formData.ages.map((age) => parseInt(age)) : undefined,
+      dietaryPreferences: formData.dietaryPreferences,
     };
 
     const success = await onSubmit(updateData);
@@ -99,10 +92,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   const handleHouseholdSizeChange = (value: string) => {
     const newSize = parseInt(value) || 0;
     const currentAges = [...formData.ages];
-    
+
     if (newSize > currentAges.length) {
       while (currentAges.length < newSize) {
-        currentAges.push('');
+        currentAges.push("");
       }
     } else {
       while (currentAges.length > newSize) {
@@ -110,29 +103,19 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       }
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       householdSize: value,
-      ages: currentAges
+      ages: currentAges,
     }));
   };
 
   return (
-    <form
-      id={formId}
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto space-y-6 p-6 bg-white rounded-lg shadow"
-    >
+    <form id={formId} onSubmit={handleSubmit} className="max-w-md mx-auto space-y-6 p-6 bg-white rounded-lg shadow">
       {/* Email - read only */}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          value={email}
-          disabled
-          className="bg-gray-50"
-        />
+        <Input type="email" id="email" value={email} disabled className="bg-gray-50" />
       </div>
 
       {/* Username */}
@@ -142,7 +125,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           type="text"
           id="userName"
           value={formData.userName}
-          onChange={e => setFormData(prev => ({ ...prev, userName: e.target.value }))}
+          onChange={(e) => setFormData((prev) => ({ ...prev, userName: e.target.value }))}
           aria-invalid={!!validationErrors.userName}
           aria-describedby={validationErrors.userName ? `${formId}-userName-error` : undefined}
         />
@@ -161,7 +144,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           id="householdSize"
           min="1"
           value={formData.householdSize}
-          onChange={e => handleHouseholdSizeChange(e.target.value)}
+          onChange={(e) => handleHouseholdSizeChange(e.target.value)}
           aria-invalid={!!validationErrors.householdSize}
           aria-describedby={validationErrors.householdSize ? `${formId}-householdSize-error` : undefined}
         />
@@ -183,10 +166,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                   type="number"
                   min="0"
                   value={age}
-                  onChange={e => {
+                  onChange={(e) => {
                     const newAges = [...formData.ages];
                     newAges[index] = e.target.value;
-                    setFormData(prev => ({ ...prev, ages: newAges }));
+                    setFormData((prev) => ({ ...prev, ages: newAges }));
                   }}
                   aria-invalid={!!validationErrors[`age_${index}`]}
                   aria-describedby={validationErrors[`age_${index}`] ? `${formId}-age-${index}-error` : undefined}
@@ -200,11 +183,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               </div>
             ))}
           </div>
-          {validationErrors.ages && (
-            <p className="text-sm text-red-500">
-              {validationErrors.ages}
-            </p>
-          )}
+          {validationErrors.ages && <p className="text-sm text-red-500">{validationErrors.ages}</p>}
         </div>
       )}
 
@@ -213,24 +192,18 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         <Label>Preferencje żywieniowe</Label>
         <DietaryCombobox
           value={formData.dietaryPreferences}
-          onChange={preferences => setFormData(prev => ({ ...prev, dietaryPreferences: preferences }))}
+          onChange={(preferences) => setFormData((prev) => ({ ...prev, dietaryPreferences: preferences }))}
         />
       </div>
 
       {/* Lists count - read only */}
-      {typeof listsCount === 'number' && (
-        <div className="text-sm text-gray-600">
-          Utworzone listy zakupów: {listsCount}
-        </div>
+      {typeof listsCount === "number" && (
+        <div className="text-sm text-gray-600">Utworzone listy zakupów: {listsCount}</div>
       )}
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
-        {isLoading ? 'Zapisywanie...' : 'Zapisz zmiany'}
+      <Button type="submit" disabled={isLoading} className="w-full">
+        {isLoading ? "Zapisywanie..." : "Zapisz zmiany"}
       </Button>
     </form>
   );

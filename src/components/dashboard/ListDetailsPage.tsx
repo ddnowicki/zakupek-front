@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useListDetails } from "@/components/hooks/useListDetails";
 import ProductTable from "./ProductTable";
-import type { UpdateProductRequest, ShoppingListDetailResponse, ProductInListResponse, UpdateShoppingListRequest } from "@/types";
+import type {
+  UpdateProductRequest,
+  ShoppingListDetailResponse,
+  ProductInListResponse,
+  UpdateShoppingListRequest,
+} from "@/types";
 import { ProductStatus } from "@/types";
 import InlineEdit from "./InlineEdit";
 import SaveButton from "./SaveButton";
@@ -10,14 +15,28 @@ import { ApiClient, HandledError } from "@/lib/api";
 import { ShoppingListService } from "@/lib/services/shopping-list";
 import { useNavigate } from "@/lib/hooks/useNavigate";
 import { toast } from "sonner";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ListDetailsPageProps {
   listId: number;
 }
 
 const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
-  const { listData: initialListData, isLoading: isLoadingInitialData, error: initialError, refetch } = useListDetails(listId);
+  const {
+    listData: initialListData,
+    isLoading: isLoadingInitialData,
+    error: initialError,
+    refetch,
+  } = useListDetails(listId);
   const [listData, setListData] = useState<ShoppingListDetailResponse | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -49,46 +68,36 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
     if (!date1 && !date2) return true;
     if (!date1 || !date2) return false;
 
-    const d1 = date1 ? new Date(date1).toISOString().split('T')[0] : "";
-    const d2 = date2 ? new Date(date2).toISOString().split('T')[0] : "";
+    const d1 = date1 ? new Date(date1).toISOString().split("T")[0] : "";
+    const d2 = date2 ? new Date(date2).toISOString().split("T")[0] : "";
     return d1 === d2;
   };
 
   // Helper function to deeply compare products
-  const areProductsEqual = (
-    product1: ProductInListResponse,
-    product2: ProductInListResponse
-  ): boolean => {
-    return (
-      product1.id === product2.id &&
-      product1.name === product2.name &&
-      product1.quantity === product2.quantity
-    );
+  const areProductsEqual = (product1: ProductInListResponse, product2: ProductInListResponse): boolean => {
+    return product1.id === product2.id && product1.name === product2.name && product1.quantity === product2.quantity;
   };
 
   // Helper function to compare product arrays
-  const areProductArraysEqual = (
-    products1: ProductInListResponse[],
-    products2: ProductInListResponse[]
-  ): boolean => {
+  const areProductArraysEqual = (products1: ProductInListResponse[], products2: ProductInListResponse[]): boolean => {
     if (products1.length !== products2.length) return false;
-    
+
     // For existing products (positive IDs), check if all properties match
-    const existingProducts1 = products1.filter(p => p.id > 0);
-    const existingProducts2 = products2.filter(p => p.id > 0);
+    const existingProducts1 = products1.filter((p) => p.id > 0);
+    const existingProducts2 = products2.filter((p) => p.id > 0);
 
     if (existingProducts1.length !== existingProducts2.length) return false;
 
     for (const product1 of existingProducts1) {
-      const product2 = existingProducts2.find(p => p.id === product1.id);
+      const product2 = existingProducts2.find((p) => p.id === product1.id);
       if (!product2 || !areProductsEqual(product1, product2)) {
         return false;
       }
     }
 
     // Check for new products (negative IDs)
-    const newProducts1 = products1.filter(p => p.id < 0);
-    const newProducts2 = products2.filter(p => p.id < 0);
+    const newProducts1 = products1.filter((p) => p.id < 0);
+    const newProducts2 = products2.filter((p) => p.id < 0);
 
     return newProducts1.length === newProducts2.length;
   };
@@ -107,7 +116,7 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
     }
 
     // Compare all relevant fields
-    const hasChanges = 
+    const hasChanges =
       !areStringsEqual(initialListData.title, listData.title) ||
       !areStringsEqual(initialListData.storeName, listData.storeName) ||
       !areDatesEqual(initialListData.plannedShoppingDate, listData.plannedShoppingDate) ||
@@ -117,43 +126,41 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
   }, [initialListData, listData]);
 
   const handleTitleChange = (newTitle: string | number) => {
-    if (typeof newTitle === 'string') {
-      setListData(prev => prev ? { ...prev, title: newTitle } : null);
+    if (typeof newTitle === "string") {
+      setListData((prev) => (prev ? { ...prev, title: newTitle } : null));
     }
   };
 
   const handleStoreNameChange = (newStoreName: string | number) => {
-    if (typeof newStoreName === 'string') {
-      setListData(prev => prev ? { ...prev, storeName: newStoreName } : null);
+    if (typeof newStoreName === "string") {
+      setListData((prev) => (prev ? { ...prev, storeName: newStoreName } : null));
     }
   };
 
   const handleDateChange = (newDate: string | number) => {
-    if (typeof newDate === 'string') {
-      setListData(prev => prev ? { ...prev, plannedShoppingDate: newDate } : null);
+    if (typeof newDate === "string") {
+      setListData((prev) => (prev ? { ...prev, plannedShoppingDate: newDate } : null));
     }
   };
 
   const handleUpdateProduct = (updatedProduct: UpdateProductRequest) => {
-    setListData(prev => {
+    setListData((prev) => {
       if (!prev) return null;
-      const updatedProducts = prev.products.map(p =>
-        p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
-      );
+      const updatedProducts = prev.products.map((p) => (p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p));
       return { ...prev, products: updatedProducts as ProductInListResponse[] };
     });
   };
 
   const handleDeleteProduct = (productId: number) => {
-    setListData(prev => {
+    setListData((prev) => {
       if (!prev) return null;
-      const updatedProducts = prev.products.filter(p => p.id !== productId);
+      const updatedProducts = prev.products.filter((p) => p.id !== productId);
       return { ...prev, products: updatedProducts };
     });
   };
 
   const handleAddNewProduct = (productData: { name: string; quantity: number }) => {
-    setListData(prev => {
+    setListData((prev) => {
       if (!prev) return null;
       const newProduct: ProductInListResponse = {
         id: -(Date.now() + Math.random()),
@@ -176,7 +183,7 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
         title: listData.title,
         storeName: listData.storeName,
         plannedShoppingDate: listData.plannedShoppingDate,
-        products: listData.products.map(p => ({
+        products: listData.products.map((p) => ({
           id: p.id > 0 ? p.id : undefined,
           name: p.name,
           quantity: p.quantity,
@@ -245,14 +252,14 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">
-          <InlineEdit
-            value={listData?.title || ""}
-            onChange={handleTitleChange}
-          />
+          <InlineEdit value={listData?.title || ""} onChange={handleTitleChange} />
         </h1>
-        <a 
+        <a
           href="#"
-          onClick={(e) => { e.preventDefault(); handleGoBack(); }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleGoBack();
+          }}
           className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
         >
           ← Powrót do list
@@ -262,15 +269,14 @@ const ListDetailsPage: React.FC<ListDetailsPageProps> = ({ listId }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Nazwa sklepu</label>
-          <InlineEdit
-            value={listData.storeName || ""}
-            onChange={handleStoreNameChange}
-          />
+          <InlineEdit value={listData.storeName || ""} onChange={handleStoreNameChange} />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Data planowanych zakupów</label>
           <InlineEdit
-            value={listData.plannedShoppingDate ? new Date(listData.plannedShoppingDate).toISOString().split('T')[0] : ""}
+            value={
+              listData.plannedShoppingDate ? new Date(listData.plannedShoppingDate).toISOString().split("T")[0] : ""
+            }
             onChange={handleDateChange}
             inputType="date"
           />

@@ -35,10 +35,10 @@ export const DashboardPage = () => {
       setItemsPerPage(mobile ? ITEMS_PER_PAGE_MOBILE : ITEMS_PER_PAGE_DESKTOP);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -113,9 +113,7 @@ export const DashboardPage = () => {
               <GenerateListButton onListGenerated={handleListCreatedOrGenerated} />
             </div>
           </div>
-          <div className="flex justify-end">
-            {sortSelect}
-          </div>
+          <div className="flex justify-end">{sortSelect}</div>
         </div>
       ) : (
         <div className="flex justify-between items-center mb-6">
@@ -135,7 +133,7 @@ export const DashboardPage = () => {
       ) : (
         <>
           <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
-            {lists.map(list => (
+            {lists.map((list) => (
               <ListCard key={list.id} list={list} />
             ))}
           </div>
@@ -143,7 +141,7 @@ export const DashboardPage = () => {
             pagination={{
               page: currentPage,
               pageSize: itemsPerPage,
-              totalItems: totalPages * itemsPerPage, 
+              totalItems: totalPages * itemsPerPage,
               totalPages,
             }}
             onPageChange={setCurrentPage}

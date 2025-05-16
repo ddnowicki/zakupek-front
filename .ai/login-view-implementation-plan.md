@@ -1,12 +1,15 @@
 # Plan implementacji widoku logowania
 
 ## 1. Przegląd
+
 Widok logowania pozwala użytkownikowi na uwierzytelnienie się w aplikacji poprzez wprowadzenie adresu e-mail i hasła. Po pomyślnej weryfikacji danych, użytkownik otrzymuje token JWT, który umożliwia autoryzację w kolejnych żądaniach do API. Widok jest zgodny z wymogami dostępności i bezpieczeństwa, zapewniając walidację danych wejściowych w czasie rzeczywistym oraz odpowiednie zarządzanie tokenem uwierzytelniającym.
 
 ## 2. Routing widoku
+
 Widok logowania będzie dostępny pod ścieżką `/login` w aplikacji Astro.
 
 ## 3. Struktura komponentów
+
 ```
 LoginPage (Astro)
 ├── LoginForm (React)
@@ -18,7 +21,9 @@ LoginPage (Astro)
 ```
 
 ## 4. Szczegóły komponentów
+
 ### LoginPage (Astro)
+
 - Opis komponentu: Główny komponent strony logowania, który renderuje układ strony i zawiera formularz logowania
 - Główne elementy: Layout, LoginForm, RegistrationLink
 - Obsługiwane interakcje: Brak (komponent statyczny)
@@ -27,67 +32,73 @@ LoginPage (Astro)
 - Propsy: Brak
 
 ### LoginForm (React)
+
 - Opis komponentu: Interaktywny formularz do wprowadzania danych logowania, zawierający pola email i hasło oraz przycisk submit
 - Główne elementy: Form, EmailInput, PasswordInput, FormErrors, SubmitButton
-- Obsługiwane interakcje: 
+- Obsługiwane interakcje:
   - Zmiana wartości pól formularza
   - Przesłanie formularza (submit)
   - Obsługa błędów walidacji i odpowiedzi API
-- Obsługiwana walidacja: 
+- Obsługiwana walidacja:
   - Email: niepusty, poprawny format adresu e-mail
   - Hasło: niepuste
   - Błędy z API: niewłaściwe poświadczenia, nieznany użytkownik
-- Typy: 
+- Typy:
   - LoginFormData
   - LoginFormErrors
-- Propsy: 
+- Propsy:
   - onSuccess?: (authResponse: AuthResponse) => void
 
 ### EmailInput (Shadcn/ui)
+
 - Opis komponentu: Pole formularza do wprowadzania adresu e-mail
 - Główne elementy: Input, Label, ErrorMessage
 - Obsługiwane interakcje: Zmiana wartości pola, focus, blur
 - Obsługiwana walidacja: Niepusty, poprawny format adresu e-mail
 - Typy: Standardowe typy dla input
-- Propsy: 
+- Propsy:
   - value: string
   - onChange: (e: ChangeEvent<HTMLInputElement>) => void
   - error?: string
   - disabled?: boolean
 
 ### PasswordInput (Shadcn/ui)
+
 - Opis komponentu: Pole formularza do wprowadzania hasła z opcją pokazania/ukrycia znaków
 - Główne elementy: Input, Label, ErrorMessage, ToggleVisibilityButton
 - Obsługiwane interakcje: Zmiana wartości pola, focus, blur, przełączanie widoczności hasła
 - Obsługiwana walidacja: Niepuste
 - Typy: Standardowe typy dla input
-- Propsy: 
+- Propsy:
   - value: string
   - onChange: (e: ChangeEvent<HTMLInputElement>) => void
   - error?: string
   - disabled?: boolean
 
 ### FormErrors (React)
+
 - Opis komponentu: Komponent do wyświetlania błędów formularza
 - Główne elementy: Lista błędów
 - Obsługiwane interakcje: Brak
 - Obsługiwana walidacja: Brak
 - Typy: FormErrors
-- Propsy: 
+- Propsy:
   - errors: string[]
 
 ### SubmitButton (Shadcn/ui)
+
 - Opis komponentu: Przycisk do wysyłania formularza z obsługą stanu ładowania
 - Główne elementy: Button, LoadingIndicator
 - Obsługiwane interakcje: Kliknięcie
 - Obsługiwana walidacja: Brak
 - Typy: Standardowe typy dla button
-- Propsy: 
+- Propsy:
   - isLoading?: boolean
   - disabled?: boolean
   - text: string
 
 ### RegistrationLink (Astro)
+
 - Opis komponentu: Link przekierowujący do strony rejestracji
 - Główne elementy: Link
 - Obsługiwane interakcje: Kliknięcie
@@ -96,6 +107,7 @@ LoginPage (Astro)
 - Propsy: Brak
 
 ## 5. Typy
+
 ```typescript
 // LoginFormData - dane formularza logowania
 interface LoginFormData {
@@ -116,7 +128,7 @@ type LoginFormState = {
   data: LoginFormData;
   errors: LoginFormErrors;
   isSubmitted: boolean;
-}
+};
 
 // Typy z istniejącego pliku types.ts
 // LoginRequest - dane wysyłane do API
@@ -124,6 +136,7 @@ type LoginFormState = {
 ```
 
 ## 6. Zarządzanie stanem
+
 Zarządzanie stanem będzie realizowane za pomocą hooka `useLoginForm`:
 
 ```typescript
@@ -132,24 +145,24 @@ function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
     isLoading: false,
     data: { email: "", password: "" },
     errors: {},
-    isSubmitted: false
+    isSubmitted: false,
   });
-  
+
   const authService = new AuthService(new ApiClient());
-  
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       data: { ...prev.data, [name]: value },
-      errors: { ...prev.errors, [name]: undefined }
+      errors: { ...prev.errors, [name]: undefined },
     }));
   };
-  
+
   const validateForm = (): boolean => {
     const errors: LoginFormErrors = {};
     let isValid = true;
-    
+
     // Walidacja email
     if (!state.data.email) {
       errors.email = "Email jest wymagany";
@@ -158,49 +171,50 @@ function useLoginForm(onSuccess?: (authResponse: AuthResponse) => void) {
       errors.email = "Nieprawidłowy format adresu e-mail";
       isValid = false;
     }
-    
+
     // Walidacja hasła
     if (!state.data.password) {
       errors.password = "Hasło jest wymagane";
       isValid = false;
     }
-    
-    setState(prev => ({ ...prev, errors }));
+
+    setState((prev) => ({ ...prev, errors }));
     return isValid;
   };
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setState(prev => ({ ...prev, isSubmitted: true }));
-    
+    setState((prev) => ({ ...prev, isSubmitted: true }));
+
     if (!validateForm()) return;
-    
-    setState(prev => ({ ...prev, isLoading: true }));
+
+    setState((prev) => ({ ...prev, isLoading: true }));
     try {
       const response = await authService.login(state.data);
       if (onSuccess) onSuccess(response);
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         errors: {
           ...prev.errors,
-          form: error instanceof Error ? error.message : "Wystąpił nieznany błąd podczas logowania"
-        }
+          form: error instanceof Error ? error.message : "Wystąpił nieznany błąd podczas logowania",
+        },
       }));
     } finally {
-      setState(prev => ({ ...prev, isLoading: false }));
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
   };
-  
+
   return {
     ...state,
     handleInputChange,
-    handleSubmit
+    handleSubmit,
   };
 }
 ```
 
 ## 7. Integracja API
+
 Integracja z API będzie realizowana za pomocą istniejących klas `ApiClient` i `AuthService`:
 
 1. Użytkownik wypełnia formularz i klika przycisk "Zaloguj"
@@ -212,14 +226,18 @@ Integracja z API będzie realizowana za pomocą istniejących klas `ApiClient` i
 7. W przypadku błędu, odpowiednia informacja jest wyświetlana użytkownikowi
 
 ## 8. Interakcje użytkownika
+
 1. **Wprowadzanie danych** - użytkownik wprowadza adres e-mail i hasło
+
    - Podczas wprowadzania, formularz może pokazywać błędy walidacji w czasie rzeczywistym
    - Pola otrzymują focus i blur zgodnie ze standardami dostępności
 
 2. **Przełączanie widoczności hasła** - użytkownik może przełączyć widoczność hasła
+
    - Kliknięcie na ikonę "oka" obok pola hasła przełącza między wyświetlaniem gwiazdek a czystym tekstem
 
 3. **Przesłanie formularza** - użytkownik klika przycisk "Zaloguj"
+
    - Przycisk zmienia wygląd na "ładowanie" podczas przetwarzania żądania
    - Pola formularza są dezaktywowane podczas ładowania
 
@@ -227,8 +245,11 @@ Integracja z API będzie realizowana za pomocą istniejących klas `ApiClient` i
    - Użytkownik zostaje przekierowany na stronę rejestracji
 
 ## 9. Warunki i walidacja
+
 ### Walidacja pól formularza
+
 - **Email**:
+
   - Jest wymagany
   - Musi być poprawnym adresem e-mail
   - Walidacja odbywa się przy utracie fokusu (blur) oraz przy przesłaniu formularza
@@ -240,25 +261,31 @@ Integracja z API będzie realizowana za pomocą istniejących klas `ApiClient` i
   - Komunikaty błędów są wyświetlane pod polem
 
 ### Walidacja formularza
+
 - Formularz nie może zostać przesłany, jeśli jakiekolwiek pole zawiera błędy
 - Podczas ładowania wszystkie pola formularza i przycisk są dezaktywowane
 
 ## 10. Obsługa błędów
+
 ### Błędy walidacji formularza
+
 - Błędy walidacji są wyświetlane pod odpowiednimi polami
 - Ogólne błędy formularza są wyświetlane na górze formularza
 
 ### Błędy API
+
 - Jeśli API zwróci status 401, wyświetlany jest komunikat "Nieprawidłowy email lub hasło"
 - Jeśli API zwróci status 400, wyświetlany jest komunikat z odpowiedzi API
 - W przypadku innych błędów (np. problemy z siecią), wyświetlany jest ogólny komunikat o błędzie
 
 ### Obsługa przypadków brzegowych
+
 - Wielokrotne próby logowania są obsługiwane poprzez dezaktywację przycisku podczas ładowania
 - W przypadku utraty połączenia podczas przesyłania formularza, wyświetlany jest komunikat o problemach z siecią
 - W przypadku wygaśnięcia sesji, użytkownik jest przekierowywany na stronę logowania z odpowiednim komunikatem
 
 ## 11. Kroki implementacji
+
 1. Utworzenie pliku strony `/src/pages/login.astro` i skonfigurowanie routingu
 2. Implementacja komponentu `LoginPage` z podstawowym układem strony
 3. Utworzenie pliku `/src/components/auth/LoginForm.tsx` dla komponentu formularza logowania

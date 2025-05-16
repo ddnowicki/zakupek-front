@@ -20,7 +20,7 @@ export class HandledError extends Error {
   constructor(
     message: string,
     public status: number,
-    public payload: ApiErrorPayload,
+    public payload: ApiErrorPayload
   ) {
     super(message);
   }
@@ -46,9 +46,9 @@ export class ApiClient {
     const currentMethod = options.method ? options.method.toUpperCase() : "GET";
 
     const headers = new Headers({
-      "Accept": "application/json",
+      Accept: "application/json",
       ...(!["GET", "DELETE"].includes(currentMethod) ? { "Content-Type": "application/json" } : {}),
-      ...(this.token ? { "Authorization": `Bearer ${this.token}` } : {}),
+      ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
       ...(options.headers || {}),
     });
 
@@ -124,15 +124,15 @@ export class ApiClient {
   }
 
   async updateProfile(data: UpdateUserProfileRequest): Promise<boolean> {
-    return this.fetchWithAuth<boolean>('/api/users/profile', {
-      method: 'PUT',
+    return this.fetchWithAuth<boolean>("/api/users/profile", {
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async getShoppingLists(page = 1, pageSize = 10, sort = "newest"): Promise<ShoppingListsResponse> {
     return this.fetchWithAuth<ShoppingListsResponse>(
-      `/api/shoppinglists?page=${page}&pageSize=${pageSize}&sort=${sort}`,
+      `/api/shoppinglists?page=${page}&pageSize=${pageSize}&sort=${sort}`
     );
   }
 

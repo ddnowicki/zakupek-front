@@ -29,7 +29,7 @@ export const useUserProfile = (): UseUserProfileReturn => {
         // Brak tokena - użytkownik prawdopodobnie nie jest zalogowany
         // Można tu dodać przekierowanie do strony logowania
         setError("User is not authenticated.");
-        window.location.href = '/login?returnUrl=/profile';
+        window.location.href = "/login?returnUrl=/profile";
         setProfile(null);
         setIsLoading(false);
         return;
@@ -63,7 +63,7 @@ export const useUserProfile = (): UseUserProfileReturn => {
           apiClient.setToken(token);
         } else {
           setError("User is not authenticated.");
-          window.location.href = '/login?returnUrl=/profile';
+          window.location.href = "/login?returnUrl=/profile";
           setIsLoading(false);
           return false;
         }
@@ -71,7 +71,7 @@ export const useUserProfile = (): UseUserProfileReturn => {
         if (success) {
           // Po udanej aktualizacji, pobierz profil ponownie, aby odświeżyć dane
           // lub zaktualizuj stan lokalnie, jeśli API zwraca zaktualizowany profil
-          await fetchProfile(); 
+          await fetchProfile();
         }
         return success;
       } catch (e) {
@@ -85,7 +85,7 @@ export const useUserProfile = (): UseUserProfileReturn => {
         setIsLoading(false);
       }
     },
-    [fetchProfile],
+    [fetchProfile]
   );
 
   useEffect(() => {

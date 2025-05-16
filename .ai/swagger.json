@@ -13,9 +13,7 @@
   "paths": {
     "/api/shoppinglists": {
       "post": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsCreateShoppingListEndpoint",
         "requestBody": {
           "x-name": "CreateShoppingListRequest",
@@ -62,9 +60,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsGetShoppingListsEndpoint",
         "parameters": [
           {
@@ -128,9 +124,7 @@
     },
     "/api/shoppinglists/{id}": {
       "delete": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsDeleteShoppingListEndpoint",
         "parameters": [
           {
@@ -175,9 +169,7 @@
         ]
       },
       "get": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsGetShoppingListByIdEndpoint",
         "parameters": [
           {
@@ -222,9 +214,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsUpdateShoppingListEndpoint",
         "parameters": [
           {
@@ -282,9 +272,7 @@
     },
     "/api/shoppinglists/generate": {
       "post": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiShoppingListsEndpointsGenerateShoppingListEndpoint",
         "requestBody": {
           "x-name": "GenerateShoppingListRequest",
@@ -333,9 +321,7 @@
     },
     "/api/users/profile": {
       "get": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiAuthEndpointsGetProfileEndpoint",
         "responses": {
           "200": {
@@ -371,9 +357,7 @@
     },
     "/api/auth/login": {
       "post": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiAuthEndpointsLoginEndpoint",
         "requestBody": {
           "x-name": "LoginRequest",
@@ -414,9 +398,7 @@
     },
     "/api/auth/register": {
       "post": {
-        "tags": [
-          "Api"
-        ],
+        "tags": ["Api"],
         "operationId": "ZakupekApiAuthEndpointsRegisterEndpoint",
         "requestBody": {
           "x-name": "RegisterRequest",
@@ -857,10 +839,7 @@
       "ZakupekApiWrapperContractAuthRequestLoginRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -879,11 +858,7 @@
       "ZakupekApiWrapperContractAuthRequestRegisterRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "email",
-          "password",
-          "userName"
-        ],
+        "required": ["email", "password", "userName"],
         "properties": {
           "email": {
             "type": "string",

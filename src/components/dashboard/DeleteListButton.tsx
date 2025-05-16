@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface DeleteListButtonProps {
   onDelete: () => void;
@@ -25,11 +34,7 @@ const DeleteListButton: React.FC<DeleteListButtonProps> = ({ onDelete, isLoading
 
   return (
     <>
-      <Button 
-        variant="destructive" 
-        onClick={handleDeleteClick}
-        disabled={isLoading}
-      >
+      <Button variant="destructive" onClick={handleDeleteClick} disabled={isLoading}>
         {isLoading ? "Usuwanie..." : "Usuń listę"}
       </Button>
 

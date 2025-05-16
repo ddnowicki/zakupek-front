@@ -56,37 +56,40 @@ export const registerSchema = z
     }
   });
 
-export const profileSchema = z.object({
-  userName: z.string().min(1, "Nazwa użytkownika jest wymagana."),
-  householdSize: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val) && val >= 1, "Liczba domowników musi być większa lub równa 1."),
-  ages: z.array(z.union([z.string(), z.number()])).optional(),
-  dietaryPreferences: z.array(z.string()).optional(),
-}).superRefine((data, ctx) => {
-  if (data.ages && data.householdSize) {
-    const householdSize = typeof data.householdSize === 'string' ? parseInt(data.householdSize, 10) : data.householdSize;
-    if (data.ages.length !== householdSize) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Liczba wprowadzonych wieku musi odpowiadać liczbie domowników.",
-        path: ["ages"],
-      });
-    }
-
-    data.ages.forEach((age, idx) => {
-      const parsedAge = typeof age === "string" ? parseInt(age, 10) : age;
-      if (isNaN(parsedAge) || parsedAge <= 0) {
+export const profileSchema = z
+  .object({
+    userName: z.string().min(1, "Nazwa użytkownika jest wymagana."),
+    householdSize: z
+      .string()
+      .transform((val) => parseInt(val, 10))
+      .refine((val) => !isNaN(val) && val >= 1, "Liczba domowników musi być większa lub równa 1."),
+    ages: z.array(z.union([z.string(), z.number()])).optional(),
+    dietaryPreferences: z.array(z.string()).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.ages && data.householdSize) {
+      const householdSize =
+        typeof data.householdSize === "string" ? parseInt(data.householdSize, 10) : data.householdSize;
+      if (data.ages.length !== householdSize) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Wiek musi być liczbą większą od 0.",
-          path: ["ages", idx],
+          message: "Liczba wprowadzonych wieku musi odpowiadać liczbie domowników.",
+          path: ["ages"],
         });
       }
-    });
-  }
-});
+
+      data.ages.forEach((age, idx) => {
+        const parsedAge = typeof age === "string" ? parseInt(age, 10) : age;
+        if (isNaN(parsedAge) || parsedAge <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Wiek musi być liczbą większą od 0.",
+            path: ["ages", idx],
+          });
+        }
+      });
+    }
+  });
 
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 export type RegisterSchemaType = z.infer<typeof registerSchema>;

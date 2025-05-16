@@ -138,15 +138,17 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       <fieldset disabled={isLoading}>
         <legend className="text-sm font-medium text-gray-700">Preferencje dietetyczne</legend>
         <div className="mt-2">
-          <DietaryCombobox 
+          <DietaryCombobox
             value={data.dietaryPreferences}
-            onChange={(newPreferences) => setState(prev => ({
-              ...prev,
-              data: {
-                ...prev.data,
-                dietaryPreferences: newPreferences
-              }
-            }))}
+            onChange={(newPreferences) =>
+              setState((prev) => ({
+                ...prev,
+                data: {
+                  ...prev.data,
+                  dietaryPreferences: newPreferences,
+                },
+              }))
+            }
             disabled={isLoading}
           />
         </div>

@@ -102,7 +102,7 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
       ...state.data,
       ages: state.data.ages.map((age) => age || "0"),
     });
-    
+
     if (result.success) {
       return { isValid: true, errors: {} };
     }
@@ -149,22 +149,22 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
       toast.success("Rejestracja zakończona pomyślnie!");
 
       const params = new URLSearchParams(window.location.search);
-      const redirectUrl = params.get('redirectUrl');
+      const redirectUrl = params.get("redirectUrl");
       navigate(redirectUrl || "/lists");
     } catch (error: unknown) {
       if (error instanceof HandledError) {
         if (error.status === 409) {
           toast.error("Błąd rejestracji", {
-            description: "Ten adres email jest już zajęty."
+            description: "Ten adres email jest już zajęty.",
           });
         } else {
           toast.error("Błąd rejestracji", {
-            description: error.message
+            description: error.message,
           });
         }
       } else if (error instanceof Error) {
         toast.error("Błąd rejestracji", {
-          description: error.message
+          description: error.message,
         });
       } else {
         toast.error("Wystąpił nieznany błąd podczas rejestracji.");
@@ -172,7 +172,7 @@ export function useRegisterForm(onSuccess?: (authResponse: AuthResponse) => void
 
       setState((prev) => ({
         ...prev,
-        isLoading: false
+        isLoading: false,
       }));
     }
   };

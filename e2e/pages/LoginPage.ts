@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
@@ -11,15 +11,15 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
     // Use more flexible locators based on roles and attributes
-    this.emailInput = page.getByRole('textbox', { name: /email/i });
-    this.passwordInput = page.getByRole('textbox', { name: /password/i });
-    this.submitButton = page.getByRole('button', { name: /sign in/i });
+    this.emailInput = page.getByRole("textbox", { name: /email/i });
+    this.passwordInput = page.getByRole("textbox", { name: /password/i });
+    this.submitButton = page.getByRole("button", { name: /sign in/i });
     this.errorMessage = page.getByText(/incorrect email or password/i);
-    this.registerLink = page.getByRole('link', { name: /register/i });
+    this.registerLink = page.getByRole("link", { name: /register/i });
   }
 
   async goto() {
-    await this.page.goto('/login');
+    await this.page.goto("/login");
   }
 
   async login(email: string, password: string) {

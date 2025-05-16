@@ -18,7 +18,10 @@ const redirectUrl = Astro.url.searchParams.get("redirectUrl");
       <div class="mt-6 pt-4 border-t border-gray-200 text-center">
         <p class="text-sm text-gray-600">
           Nie masz jeszcze konta?
-          <a href={`/register${redirectUrl ? `?redirectUrl=${encodeURIComponent(redirectUrl)}` : ''}`} class="text-blue-600 hover:text-blue-800 font-medium">Zarejestruj się</a>
+          <a
+            href={`/register${redirectUrl ? `?redirectUrl=${encodeURIComponent(redirectUrl)}` : ""}`}
+            class="text-blue-600 hover:text-blue-800 font-medium">Zarejestruj się</a
+          >
         </p>
       </div>
     </div>

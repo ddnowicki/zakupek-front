@@ -4,12 +4,7 @@ import ProfileForm from "./ProfileForm.tsx";
 import { toast } from "sonner";
 
 const ProfileFormWrapper: React.FC = () => {
-  const {
-    profile,
-    isLoading,
-    error,
-    updateProfile,
-  } = useUserProfile();
+  const { profile, isLoading, error, updateProfile } = useUserProfile();
 
   if (isLoading && !profile) {
     return (
@@ -35,7 +30,7 @@ const ProfileFormWrapper: React.FC = () => {
     }
 
     toast.error("Błąd ładowania profilu", {
-      description: errorMessage
+      description: errorMessage,
     });
   }
 

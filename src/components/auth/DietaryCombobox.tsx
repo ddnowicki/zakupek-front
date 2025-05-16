@@ -15,21 +15,23 @@ export function DietaryCombobox({ value, onChange, disabled = false }: DietaryCo
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
-  const filteredSuggestions = DIETARY_PREFERENCES
-    .filter((diet) => 
-      diet.label.toLowerCase().startsWith(inputValue.toLowerCase()) &&
-      !value.includes(diet.label)
-    );
+  const filteredSuggestions = DIETARY_PREFERENCES.filter(
+    (diet) => diet.label.toLowerCase().startsWith(inputValue.toLowerCase()) && !value.includes(diet.label)
+  );
 
   const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
   const allSuggestions: DietaryPreference[] = inputValue.trim()
     ? [
-        ...(value.includes(capitalizeFirstLetter(inputValue.trim())) ? [] : [{
-          id: inputValue.toLowerCase().replace(/\s+/g, "-"),
-          label: capitalizeFirstLetter(inputValue.trim()),
-          isCustom: true,
-        }]),
+        ...(value.includes(capitalizeFirstLetter(inputValue.trim()))
+          ? []
+          : [
+              {
+                id: inputValue.toLowerCase().replace(/\s+/g, "-"),
+                label: capitalizeFirstLetter(inputValue.trim()),
+                isCustom: true,
+              },
+            ]),
         ...filteredSuggestions.filter((diet) => diet.label.toLowerCase() !== inputValue.toLowerCase()),
       ]
     : [];
@@ -41,7 +43,7 @@ export function DietaryCombobox({ value, onChange, disabled = false }: DietaryCo
   };
 
   const handleRemove = (preference: string) => {
-    onChange(value.filter(p => p !== preference));
+    onChange(value.filter((p) => p !== preference));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

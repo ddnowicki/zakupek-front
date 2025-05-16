@@ -1,6 +1,7 @@
 # REST API Plan
 
 ## 1. Resources
+
 - **Users** – Represents registered users. (Based on the Users table)
 - **ShoppingLists** – Represents shopping list entities created by users. (Based on the ShoppingLists table)
 - **Products** – Represents individual products attached to shopping lists. (Based on the Products table)
@@ -11,7 +12,9 @@
 ## 2. Endpoints
 
 ### Users
+
 1. **User Registration**
+
    - **Method:** POST
    - **URL:** `/api/auth/register`
    - **Description:** Registers a new user with email, password, and household profile details.
@@ -40,6 +43,7 @@
    - **Error Codes:** 400 Bad Request, 409 Conflict (Email already exists)
 
 2. **Get User Profile**
+
    - **Method:** GET
    - **URL:** `/api/users/profile`
    - **Description:** Retrieves authenticated user's profile details.
@@ -92,6 +96,7 @@
    - **Error Codes:** 400 Bad Request, 401 Unauthorized
 
 ### Authentication
+
 1. **User Login**
    - **Method:** POST
    - **URL:** `/api/auth/login`
@@ -116,7 +121,9 @@
    - **Error Codes:** 401 Unauthorized, 400 Bad Request
 
 ### ShoppingLists
+
 1. **List All User Shopping Lists**
+
    - **Method:** GET
    - **URL:** `/api/shoppinglists`
    - **Description:** Retrieves all shopping lists for the authenticated user.
@@ -127,18 +134,18 @@
      {
        "data": [
          {
-           "id": 1, 
-           "title": "Weekly Groceries", 
-           "productsCount": 12, 
+           "id": 1,
+           "title": "Weekly Groceries",
+           "productsCount": 12,
            "plannedShoppingDate": "2025-04-15T09:00:00Z",
            "createdAt": "2025-04-10T12:00:00Z",
            "source": "manual",
            "storeName": "Lidl"
          },
          {
-           "id": 2, 
-           "title": "Weekend Party", 
-           "productsCount": 5, 
+           "id": 2,
+           "title": "Weekend Party",
+           "productsCount": 5,
            "plannedShoppingDate": null,
            "createdAt": "2025-04-11T09:30:00Z",
            "source": "ai_generated",
@@ -157,6 +164,7 @@
    - **Error Codes:** 401 Unauthorized
 
 2. **Get Single Shopping List**
+
    - **Method:** GET
    - **URL:** `/api/shoppinglists/{id}`
    - **Description:** Retrieves details of a specific shopping list, including all its products.
@@ -196,6 +204,7 @@
    - **Error Codes:** 401 Unauthorized, 404 Not Found
 
 3. **Create New Shopping List**
+
    - **Method:** POST
    - **URL:** `/api/shoppinglists`
    - **Description:** Creates a new shopping list with optional title and initial products.
@@ -244,6 +253,7 @@
    - **Error Codes:** 400 Bad Request, 401 Unauthorized
 
 4. **Edit Shopping List**
+
    - **Method:** PUT
    - **URL:** `/api/shoppinglists/{id}`
    - **Description:** Updates an existing shopping list, including its title, store name, planned date, and items. Removed items are deleted when omitted from the products array.
@@ -268,6 +278,7 @@
    - **Error Codes:** 400 Bad Request, 401 Unauthorized, 404 Not Found
 
 5. **Delete Shopping List**
+
    - **Method:** DELETE
    - **URL:** `/api/shoppinglists/{id}`
    - **Description:** Permanently deletes a shopping list and all its associated products.
@@ -300,26 +311,26 @@
        "storeId": null,
        "storeName": "lidl",
        "products": [
-         { 
-           "id": 301, 
-           "name": "Milk", 
-           "quantity": 2, 
-           "statusId": 1, 
-           "status": "To buy" 
+         {
+           "id": 301,
+           "name": "Milk",
+           "quantity": 2,
+           "statusId": 1,
+           "status": "To buy"
          },
-         { 
-           "id": 302, 
-           "name": "Bread", 
-           "quantity": 1, 
-           "statusId": 1, 
-           "status": "To buy" 
+         {
+           "id": 302,
+           "name": "Bread",
+           "quantity": 1,
+           "statusId": 1,
+           "status": "To buy"
          },
-         { 
-           "id": 303, 
-           "name": "Eggs", 
-           "quantity": 12, 
-           "statusId": 1, 
-           "status": "To buy" 
+         {
+           "id": 303,
+           "name": "Eggs",
+           "quantity": 12,
+           "statusId": 1,
+           "status": "To buy"
          }
        ]
      }
@@ -328,6 +339,7 @@
    - **Error Codes:** 400 Bad Request, 401 Unauthorized, 500 Internal Server Error
 
 ## 3. Authentication and Authorization
+
 - **Mechanism:** JSON Web Tokens (JWT) with bearer token authentication.
 - **Implementation Details:**
   - Upon successful login via `/api/auth/login` or registration, an access token is issued.
@@ -338,8 +350,9 @@
   - User identity is extracted from the token for authorization checks against resources.
 
 ## 4. Validation and Business Logic
+
 - **Validation Rules:**
-  1. **User Endpoints:** 
+  1. **User Endpoints:**
      - Email must be unique and in a valid format.
      - Password must meet complexity requirements.
      - Additional profile fields (e.g., household size, dietary preferences) are validated for presence and proper data types.

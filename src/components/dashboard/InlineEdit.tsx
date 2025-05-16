@@ -13,7 +13,13 @@ interface InlineEditProps {
   originalValueOnError?: boolean; // Added for better UX on validation error
 }
 
-const InlineEdit: React.FC<InlineEditProps> = ({ value, onChange, inputType = "text", validationRules, originalValueOnError = true }) => {
+const InlineEdit: React.FC<InlineEditProps> = ({
+  value,
+  onChange,
+  inputType = "text",
+  validationRules,
+  originalValueOnError = true,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
@@ -88,8 +94,8 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onChange, inputType = "t
   // When not editing, display the value or a placeholder for empty string
   // Apply min height and width to ensure clickability
   return (
-    <span 
-      onDoubleClick={handleDoubleClick} 
+    <span
+      onDoubleClick={handleDoubleClick}
       className="cursor-pointer hover:bg-gray-100 p-1 rounded min-h-8 min-w-20 inline-block align-middle"
     >
       {value === "" ? <span className="text-gray-400 italic">[puste]</span> : value}
