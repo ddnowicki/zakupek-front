@@ -1,6 +1,5 @@
 import { defineConfig } from "vitest/config";
 import { resolve } from "path";
-import "@testing-library/jest-dom";
 
 export default defineConfig({
   test: {

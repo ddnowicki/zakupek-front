@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # test-results folder
 test-results/*
+
+# playwright test results
+playwright-report/*

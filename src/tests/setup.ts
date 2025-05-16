@@ -1,9 +1,11 @@
-import { expect, afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
-import * as matchers from '@testing-library/jest-dom/matchers';
+/// <reference types="vitest/globals" />
+import { expect, afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
+import "@testing-library/jest-dom";
 
 // Extend Vitest's expect method with testing-library matchers
-expect.extend(matchers as any);
+expect.extend(matchers);
 
 // Clean up after each test
 afterEach(() => {
@@ -11,7 +13,7 @@ afterEach(() => {
 });
 
 // Mock window.matchMedia which is required for some components
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
     matches: false,
@@ -22,5 +24,5 @@ Object.defineProperty(window, 'matchMedia', {
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
-  }))
+  })),
 });
