@@ -10,14 +10,9 @@ vi.mock("@/components/ui/button", () => ({
         onClick(event);
       }
     };
-    
+
     return (
-      <button 
-        onClick={handleClick}
-        disabled={disabled} 
-        data-variant={variant}
-        data-testid="save-button"
-      >
+      <button onClick={handleClick} disabled={disabled} data-variant={variant} data-testid="save-button">
         {children}
       </button>
     );
@@ -26,14 +21,14 @@ vi.mock("@/components/ui/button", () => ({
 
 describe("SaveButton Component", () => {
   const mockOnSave = vi.fn();
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("renderuje przycisk z tekstem 'Zapisz'", () => {
     render(<SaveButton onSave={mockOnSave} />);
-    
+
     const button = screen.getByTestId("save-button");
     expect(button).toHaveTextContent("Zapisz");
     expect(button).not.toBeDisabled();
@@ -41,7 +36,7 @@ describe("SaveButton Component", () => {
 
   it("renderuje przycisk z tekstem 'Zapisywanie...' gdy isLoading=true", () => {
     render(<SaveButton onSave={mockOnSave} isLoading={true} />);
-    
+
     const button = screen.getByTestId("save-button");
     expect(button).toHaveTextContent("Zapisywanie...");
     expect(button).toBeDisabled();
@@ -49,26 +44,26 @@ describe("SaveButton Component", () => {
 
   it("wywołuje funkcję onSave po kliknięciu przycisku", () => {
     render(<SaveButton onSave={mockOnSave} />);
-    
+
     const button = screen.getByTestId("save-button");
     fireEvent.click(button);
-    
+
     expect(mockOnSave).toHaveBeenCalledTimes(1);
   });
 
   it("nie wywołuje funkcji onSave gdy przycisk jest disabled", () => {
     render(<SaveButton onSave={mockOnSave} isLoading={true} />);
-    
+
     const button = screen.getByTestId("save-button");
     fireEvent.click(button);
-    
+
     expect(mockOnSave).not.toHaveBeenCalled();
   });
-  
+
   it("ma variant 'default'", () => {
     render(<SaveButton onSave={mockOnSave} />);
-    
+
     const button = screen.getByTestId("save-button");
-    expect(button).toHaveAttribute('data-variant', 'default');
+    expect(button).toHaveAttribute("data-variant", "default");
   });
 });

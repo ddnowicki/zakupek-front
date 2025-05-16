@@ -18,10 +18,10 @@ vi.mock("@/components/dashboard/InlineEdit", () => ({
 
 vi.mock("@/components/ui/button", () => ({
   Button: ({ children, onClick, variant, size, disabled, className }) => (
-    <button 
-      onClick={onClick} 
-      disabled={disabled} 
-      data-variant={variant} 
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      data-variant={variant}
       data-size={size}
       className={className}
       data-testid={`button-${children?.toString().toLowerCase()}`}
@@ -32,16 +32,7 @@ vi.mock("@/components/ui/button", () => ({
 }));
 
 vi.mock("@/components/ui/input", () => ({
-  Input: ({ 
-    type, 
-    placeholder, 
-    value, 
-    onChange, 
-    onBlur, 
-    onKeyDown, 
-    min, 
-    className 
-  }) => (
+  Input: ({ type, placeholder, value, onChange, onBlur, onKeyDown, min, className }) => (
     <input
       type={type}
       placeholder={placeholder}
@@ -59,9 +50,9 @@ vi.mock("@/components/ui/input", () => ({
 describe("ProductTable Component", () => {
   const mockProducts: ProductInListResponse[] = [
     { id: 1, name: "Chleb", quantity: 1, status: "To Buy" },
-    { id: 2, name: "Mleko", quantity: 2, status: "In Cart" }
+    { id: 2, name: "Mleko", quantity: 2, status: "In Cart" },
   ];
-  
+
   const mockOnUpdateProduct = vi.fn();
   const mockOnDeleteProduct = vi.fn();
   const mockOnAddNewProduct = vi.fn();
@@ -73,7 +64,7 @@ describe("ProductTable Component", () => {
   it("renderuje pustą informację gdy brak produktów", () => {
     // Mock implementation to return null for empty products array
     const { container } = render(
-      <ProductTable 
+      <ProductTable
         products={null as any} // Force null to trigger the empty state
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
@@ -85,8 +76,8 @@ describe("ProductTable Component", () => {
 
   it("renderuje tabelę z produktami", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -101,8 +92,8 @@ describe("ProductTable Component", () => {
 
   it("wywołuje funkcję onUpdateProduct po edycji nazwy produktu", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -115,14 +106,14 @@ describe("ProductTable Component", () => {
     expect(mockOnUpdateProduct).toHaveBeenCalledWith({
       id: 1,
       name: "Changed Chleb",
-      quantity: 1
+      quantity: 1,
     });
   });
 
   it("wywołuje funkcję onUpdateProduct po edycji ilości produktu", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -133,28 +124,28 @@ describe("ProductTable Component", () => {
     const inlineEditQuantity = screen.getAllByTestId("inline-edit-number")[0];
     // We need to ensure the value is a valid number to avoid validation errors
     const mockQuantityValue = 5; // Valid numerical value
-    
+
     vi.mocked(inlineEditQuantity).onclick = () => {
       mockOnUpdateProduct({
         id: 1,
         name: "Chleb",
-        quantity: mockQuantityValue
+        quantity: mockQuantityValue,
       });
     };
-    
+
     fireEvent.click(inlineEditQuantity);
-    
+
     expect(mockOnUpdateProduct).toHaveBeenCalledWith({
       id: 1,
       name: "Chleb",
-      quantity: expect.any(Number)
+      quantity: expect.any(Number),
     });
   });
 
   it("wywołuje funkcję onDeleteProduct po kliknięciu przycisku usuwania", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -169,8 +160,8 @@ describe("ProductTable Component", () => {
 
   it("dodaje nowy produkt po wypełnieniu formularza i kliknięciu przycisku Dodaj", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -188,14 +179,14 @@ describe("ProductTable Component", () => {
 
     expect(mockOnAddNewProduct).toHaveBeenCalledWith({
       name: "Jajka",
-      quantity: 12
+      quantity: 12,
     });
   });
 
   it("dodaje nowy produkt po naciśnięciu Enter", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -209,14 +200,14 @@ describe("ProductTable Component", () => {
 
     expect(mockOnAddNewProduct).toHaveBeenCalledWith({
       name: "Jajka",
-      quantity: expect.any(Number)
+      quantity: expect.any(Number),
     });
   });
 
   it("nie dodaje produktu gdy nazwa jest pusta", () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
@@ -234,8 +225,8 @@ describe("ProductTable Component", () => {
 
   it("resetuje formularz po dodaniu nowego produktu", async () => {
     render(
-      <ProductTable 
-        products={mockProducts} 
+      <ProductTable
+        products={mockProducts}
         onUpdateProduct={mockOnUpdateProduct}
         onDeleteProduct={mockOnDeleteProduct}
         onAddNewProduct={mockOnAddNewProduct}
